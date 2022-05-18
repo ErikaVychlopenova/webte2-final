@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="xvychlopenova@147.175.98.196">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/webte2-final" local="$PROJECT_DIR$" web="/webte2-final" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
