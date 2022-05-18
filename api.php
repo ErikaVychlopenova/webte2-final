@@ -1,16 +1,22 @@
 <?php
+require_once 'config/config.php';
 header('Content-Type: application/json; charset=utf-8');
-session_start();
-switch ($_SERVER['REQUEST_METHOD']) {
-    case "GET":
-        if(isset($_GET['r'])) {
-            $output = "";
-            $r = $_GET['r'];
-            $x = "initX1;initX1d;initX2;initX2d;0";
-            if (isset($_SESSION['x'])) {
-                $x = $_SESSION['x'];
-            }
-            exec('octave-cli --eval "pkg load control; m1 = 2500; m2 = 320;
+if($_GET['api_key'] !== $api_key){
+    header("HTTP/1.1 401 Unauthorized");
+}
+else{
+    session_start();
+    switch ($_SERVER['REQUEST_METHOD']) {
+        case "GET":
+            if(isset($_GET['r'])) {
+                $output = "";
+                header("HTTP/1.1 200 OK");
+                $r = $_GET['r'];
+                $x = "initX1;initX1d;initX2;initX2d;0";
+                if (isset($_SESSION['x'])) {
+                    $x = $_SESSION['x'];
+                }
+                exec('octave-cli --eval "pkg load control; m1 = 2500; m2 = 320;
             k1 = 80000; k2 = 500000;
             b1 = 350; b2 = 15020;
             A=[0 1 0 0;-(b1*b2)/(m1*m2) 0 ((b1/m1)*((b1/m1)+(b1/m2)+(b2/m2)))-(k1/m1) -(b1/m1);b2/m2 0 -((b1/m1)+(b1/m2)+(b2/m2)) 1;k2/m2 0 -((k1/m1)+(k1/m2)+(k2/m2)) 0];
@@ -30,22 +36,22 @@ switch ($_SERVER['REQUEST_METHOD']) {
             initX2d=0;
             [y,t,x]=lsim(sys*[0;1],r*ones(size(t)),t,[' . $x . ']);new = x(size(x,1),:); [x(:,1),x(:,3)]"', $output);
 
-            $string;
-            $x1 = [];
-            $x2 = [];
-            foreach ($output as $o) {
-                $string = str_replace("   ", " ", $o);
-                $string = str_replace("  ", " ", $string);
-                $string = trim($string);
-                $string = explode(' ', $string, 2);
-                if ($string[0] !== 'ans' && count($string) == 2) {
-                    $x1[] = (float)$string[0];
-                    $x2[] = (float)$string[1];
+                $string;
+                $x1 = [];
+                $x2 = [];
+                foreach ($output as $o) {
+                    $string = str_replace("   ", " ", $o);
+                    $string = str_replace("  ", " ", $string);
+                    $string = trim($string);
+                    $string = explode(' ', $string, 2);
+                    if ($string[0] !== 'ans' && count($string) == 2) {
+                        $x1[] = (float)$string[0];
+                        $x2[] = (float)$string[1];
+                    }
                 }
-            }
-            $values = array('x1' => $x1, 'x2' => $x2);
-            $output = '';
-            exec('octave-cli --eval "pkg load control; m1 = 2500; m2 = 320;
+                $values = array('x1' => $x1, 'x2' => $x2);
+                $output = '';
+                exec('octave-cli --eval "pkg load control; m1 = 2500; m2 = 320;
             k1 = 80000; k2 = 500000;
             b1 = 350; b2 = 15020;
             A=[0 1 0 0;-(b1*b2)/(m1*m2) 0 ((b1/m1)*((b1/m1)+(b1/m2)+(b2/m2)))-(k1/m1) -(b1/m1);b2/m2 0 -((b1/m1)+(b1/m2)+(b2/m2)) 1;k2/m2 0 -((k1/m1)+(k1/m2)+(k2/m2)) 0];
@@ -64,15 +70,33 @@ switch ($_SERVER['REQUEST_METHOD']) {
             initX2=0;
             initX2d=0;
             [y,t,x]=lsim(sys*[0;1],r*ones(size(t)),t,[' . $x . ']);x(size(x,1),:)"', $output);
-            $string = str_replace("   ", " ", $output[2]);
-            $string = str_replace("  ", " ", $string);
-            $string = trim($string);
-            $_SESSION['x'] = $string;
-            echo json_encode($values);
-        }
-        else{
-            header("HTTP/1.1 404 Not Found");
-        }
-        break;
+                $string = str_replace("   ", " ", $output[2]);
+                $string = str_replace("  ", " ", $string);
+                $string = trim($string);
+                $_SESSION['x'] = $string;
+                echo json_encode($values);
+            }
+            if(isset($_GET['input'])){
+                $output = '';
+                exec('octave-cli --eval "pkg load control;'.$_GET['input'].'"',$output);
+                header("HTTP/1.1 200 OK");
+                $answer = implode('', $output);
+                $success = 1;
+                if(strlen($answer)<1){
+                    $success = 0;
+                }
+                $con = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $stmt = $con->prepare("INSERT INTO logs (command, success) VALUES (:command, :success)");
+                $stmt->bindParam(":command", $_GET['input']);
+                $stmt->bindParam(":success", $success);
+                $stmt->execute();
+                echo json_encode(array("output"=>$answer));
+            }
+            else{
+                header("HTTP/1.1 404 Not Found");
+            }
+            break;
+    }
 }
 ?>
