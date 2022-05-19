@@ -21,4 +21,53 @@ function selectLang(value){
     }
 }
 
+inputButtonEN.addEventListener("click", () =>{
+    const form = document.getElementById("inputFormEN");
+    const data = new FormData(form);
+    let json = jsonify(data);
+    const request = new Request("api.php?api_key="+key,
+        {
+            method: "POST",
+            body : json
+        });
+    fetch(request)
+        .then(response => {
+            if (response.status === 200) {
+                response.json().then(result => {
+                    document.getElementById("outputSK").innerText = result["output"];
+                    document.getElementById("outputEN").innerText = result["output"];
+                })
+            } else {
+                document.getElementById("outputSK").innerText = "Chýba príkaz.";
+                document.getElementById("outputEN").innerText = "Input missing.";
+            }
+        })
+})
+
+inputRbuttonEN.addEventListener("click", () => {
+    const form = document.getElementById("inputFormR-EN");
+    const data = new FormData(form);
+
+    fetch("api.php?api_key="+key+"&r="+data.get('r'), {method: "GET"})
+        .then(response => {
+            if(response.status === 200){
+                response.json().then(result => {
+                    console.log(result);
+                })
+            }
+        })
+})
+
+emailButtonEN.addEventListener("click", () => {
+    fetch("api.php?api_key="+key+"&email="+email, {method: "GET"})
+        .then(response => {
+            response.json().then(result => {
+                console.log(result);
+                document.getElementById("emailResponseSK").innerText = result["message"];
+                document.getElementById("emailResponseEN").innerText = result["message"];
+            })
+        })
+})
+
+
 
