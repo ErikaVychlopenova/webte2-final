@@ -10,7 +10,7 @@ require 'PHPMailer/src/SMTP.php';
 
 require_once 'config/config.php';
 header('Content-Type: application/json; charset=utf-8');
-if (1===2){ //($_GET['api_key'] === $api_key){
+if ($_GET['api_key'] !== $api_key){
     header("HTTP/1.1 401 Unauthorized");
 }
 else{
@@ -137,7 +137,7 @@ else{
 
                      //Recipients
                      $mail->setFrom('webtech2022@azet.sk');
-                     $mail->addAddress($email);     //Add a recipient
+                     $mail->addAddress($_GET['email']);     //Add a recipient
 
                      //Attachments
                      $mail->addAttachment('logs.csv');         //Add attachments
