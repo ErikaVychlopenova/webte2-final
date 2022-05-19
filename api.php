@@ -1,7 +1,16 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
 require_once 'config/config.php';
 header('Content-Type: application/json; charset=utf-8');
-if($_GET['api_key'] !== $api_key){
+if (1===2){ //($_GET['api_key'] === $api_key){
     header("HTTP/1.1 401 Unauthorized");
 }
 else{
@@ -76,7 +85,7 @@ else{
                 $_SESSION['x'] = $string;
                 echo json_encode($values);
             }
-            if(isset($_GET['input'])){
+            elseif(isset($_GET['input'])){
                 $output = '';
                 exec('octave-cli --eval "pkg load control;'.$_GET['input'].'"',$output);
                 header("HTTP/1.1 200 OK");
@@ -92,6 +101,58 @@ else{
                 $stmt->bindParam(":success", $success);
                 $stmt->execute();
                 echo json_encode(array("output"=>$answer));
+            }
+            elseif(isset($_GET['email'])){
+
+                $con = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $stmt = $con->prepare("SELECT command, created_at, success from logs");
+                $stmt->execute();
+
+                $filename = "logs.csv";
+                $delimiter = ",";
+
+                $f = fopen($filename, 'w');
+                ftruncate($f, 0);
+
+                $fields = array('command','created_at','success');
+                fputcsv($f, $fields, $delimiter);
+
+                while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                    $status = ($row['success'] == 1)?'successful':'unsuccessful';
+                    $lineData = array($row['command'], $row['created_at'], $status);
+                    fputcsv($f, $lineData, $delimiter);
+                }
+                 $mail = new PHPMailer(true);
+                 try {
+                    //Server settings
+                     $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                     $mail->isSMTP();                                            //Send using SMTP
+                     $mail->Host       = 'smtp.azet.sk';                     //Set the SMTP server to send through
+                     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                     $mail->Username   = 'webtech2022@azet.sk';                     //SMTP username
+                     $mail->Password   = 'hesloheslo';                               //SMTP password
+                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+                     //Recipients
+                     $mail->setFrom('webtech2022@azet.sk');
+                     $mail->addAddress($email);     //Add a recipient
+
+                     //Attachments
+                     $mail->addAttachment('logs.csv');         //Add attachments
+
+                     //Content
+                     $mail->isHTML(false);                                  //Set email format to HTML
+                     $mail->Subject = 'Logs';
+                     $mail->Body    = 'Logs in csv file.';
+                     $mail->Send();
+                     echo 'Message has been sent';
+                 } catch (Exception $e) {
+                     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                 }
+
+
             }
             else{
                 header("HTTP/1.1 404 Not Found");
