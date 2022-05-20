@@ -12,6 +12,7 @@ require "config/config.php";
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <title>Webte Final</title>
 </head>
 <header><h1 id="lang">Tlmič automobilu</h1></header>
@@ -41,7 +42,7 @@ require "config/config.php";
     </form>
     <form id="inputFormR-SK">
         <label for="r">Zadaj r:</label>
-        <input id="r" name="r" type="number">
+        <input id="r" name="r" type="number" step="0.01">
         <button type="button" id="buttonR-SK">Odošli r</button>
     </form>
     <form>
@@ -68,13 +69,16 @@ require "config/config.php";
     </form>
 </div>
 
-<canvas id="graphCanvas"></canvas>
+<canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>
 <canvas id="animationCanvas"></canvas>
 
 <script>
     const inputButtonSK = document.getElementById("inputButtonSK");
     const inputButtonEN = document.getElementById("inputButtonEN");
+    const graphCanvas = document.getElementById("graphCanvas");
     let key = "<?php echo $api_key;?>";
+    let x1;
+    let x2;
 
     inputButtonSK.addEventListener("click", () =>{
         const form = document.getElementById("inputFormSK");
@@ -104,20 +108,72 @@ require "config/config.php";
 
     const inputRbuttonSK = document.getElementById("buttonR-SK");
     const inputRbuttonEN = document.getElementById("buttonR-EN");
-
+    let timer;
+    let index = 0;
+    let r;
     inputRbuttonSK.addEventListener("click", () => {
         const form = document.getElementById("inputFormR-SK");
         const data = new FormData(form);
-
-        fetch("api.php?api_key="+key+"&r="+data.get('r'), {method: "GET"})
+        r = data.get('r');
+        fetch("api.php?api_key="+key+"&r="+r, {method: "GET"})
             .then(response => {
                 if(response.status === 200){
+                    index = 0;
                     response.json().then(result => {
-                        console.log(result);
+                        x1 = result["x1"];
+                        x2 = result["x2"];
+                        timer = setInterval(addData, 10);
                     })
                 }
             })
     })
+
+    let oldValuesX1 = [r];
+    let oldValuesX2 = [r];
+    let oldLabels = [0];
+
+    function addData() {
+        let newDataX1 = x1[index];
+        let newDataX2 = x2[index];
+        let newRecord = {
+            data: {
+                x1: newDataX1,
+                x2: newDataX2
+            }
+        }
+        oldValuesX1.push(newRecord.data.x1);
+        oldValuesX2.push(newRecord.data.x2)
+        oldLabels.push(index);
+        graph.update();
+        index++;
+        if(index === x1.length){
+            clearInterval(timer);
+        }
+    }
+
+    const graph = new Chart("graphCanvas", {
+        type: 'line',
+        data: {
+            labels : oldLabels,
+            datasets: [
+                {
+                    label: "X1",
+                    data: oldValuesX1,
+                    borderColor: 'rgb(194,20,51)',
+                    tension: 0.5,
+                },
+                {
+                    label: "X2",
+                    data: oldValuesX2,
+                    borderColor: 'rgb(0,73,255)',
+                    tension: 0.5,
+                }
+            ]
+        },
+        options: {}
+    });
+
+
 
     const emailButtonSK = document.getElementById("emailButtonSK");
     const emailButtonEN = document.getElementById("emailButtonEN");
@@ -144,6 +200,9 @@ require "config/config.php";
         });
         return JSON.stringify(object);
     }
+
+
+
 
 
 </script>
