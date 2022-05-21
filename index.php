@@ -57,7 +57,7 @@ require "config/config.php";
     <form id="loggedInForm-SK">
         <button type="button" id="buttonLogout-SK">Odhlásiť sa</button>
     </form>
-    <p id="loginStatusText-SK">Nie ste prihlásení.</p>
+    <p id="loginStatusText-SK">Nie ste prihlásení</p>
     <ul id="editorList-SK"></ul>
 </div>
 
@@ -94,51 +94,8 @@ require "config/config.php";
      */
     const socket = new WebSocket('wss://site196.webte.fei.stuba.sk:9000');
 
-    let user = {};
-    let editors = [];
-
-    socket.addEventListener("message", msg => {
-        const data = JSON.parse(msg.data);
-        if ('event' in data) {
-            if (data.event === 'new_user') {
-                user.id = data.id;
-                user.role = data.role;
-            }
-            else if (data.event === 'change_role'){
-                if (data.role === 'editor') {
-                    editors.push({'id': data.id, 'role': data.role, 'name': data.name})
-                    updateEditors();
-                } else if (data.role === 'visitor' && data.old_role === 'editor'){
-                    editors.forEach(editor => {
-                        if (editor.id === data.id){
-                            let index = editors.indexOf(editor);
-                            if (index !== -1) {
-                                editors.splice(index, 1);
-                            }
-                        }
-                    })
-                    updateEditors();
-                }
-            }
-        }
-    })
-
-    window.addEventListener("beforeunload", () => {
-        if (user.role === 'editor'){
-            logoutButtonSK.click();
-        }
-    })
-
-    const findInEditors = (name) => {
-        let flag = false;
-        editors.forEach(editor => {
-            if (editor.name === name){
-                flag = true;
-            }
-        })
-        return flag;
-    }
-
+    let user = {};      // current user
+    let editors = [];   // list of active editors
 
     const loginFormSK = document.getElementById("inputFormName-SK");
     const loggedInFormSK = document.getElementById("loggedInForm-SK");
@@ -150,6 +107,58 @@ require "config/config.php";
 
     loggedInFormSK.style.display = 'none';
 
+    // ws message listener
+    socket.addEventListener("message", msg => {
+        const data = JSON.parse(msg.data);
+        if ('event' in data) {
+            if (data.event === 'new_user') {
+                // this is the current user
+                user.id = data.id;
+                user.role = data.role;
+            }
+            else if (data.event === 'change_role'){
+                if (data.role === 'editor') {
+                    editors.push({'id': data.id, 'role': data.role, 'name': data.name})
+                    updateEditors();
+                } else if (data.role === 'visitor' && data.old_role === 'editor'){
+                    // editor logged out -> remove him from editors list
+                    editors.forEach(editor => {
+                        if (editor.id === data.id){
+                            let index = editors.indexOf(editor);
+                            if (index !== -1) {
+                                editors.splice(index, 1);
+                            }
+                        }
+                    })
+                    updateEditors();
+                    // logout any spectators of this editor
+                    if (user.role === 'spectator' && user.spectated === data.id){
+                        logoutButtonSK.click();
+                    }
+                }
+            }
+        }
+    })
+
+    // force logout before exiting / refreshing page
+    window.addEventListener("beforeunload", () => {
+        if (user.role === 'editor' || user.role === 'spectator'){
+            logoutButtonSK.click();
+        }
+    })
+
+    // is name already taken?
+    const findInEditors = (name) => {
+        let flag = false;
+        editors.forEach(editor => {
+            if (editor.name === name){
+                flag = true;
+            }
+        })
+        return flag;
+    }
+
+    // update list of editors
     const updateEditors = () => {
         if (editors) {
             let child = editorListSK.lastElementChild;
@@ -162,13 +171,23 @@ require "config/config.php";
             let li = document.createElement("li");
             li.innerText = editor.name;
             li.style.cursor = "pointer";
+            // listener for each editor item -> switch to spectate the editor
             li.addEventListener("click", () => {
-
+                let oldRole = user.role;
+                user.role = 'spectator';
+                user.spectated = editor.id;
+                socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'old_role': oldRole,
+                    'spectated': user.spectated}));
+                loginFormSK.style.display = 'none';
+                loggedInFormSK.style.display = 'block';
+                editorListSK.style.display = 'none';
+                loginStatusSK.innerText = "Sledujete užívateľa menom: "+editor.name;
             })
             editorListSK.appendChild(li);
         })
     }
 
+    // editor login
     loginButtonSK.addEventListener("click", () =>{
         const data = new FormData(loginFormSK);
         let name = data.get('name');
@@ -182,20 +201,21 @@ require "config/config.php";
             editorListSK.style.display = 'none';
             loginStatusSK.innerText = "Prihlásený pod menom: "+name;
         } else {
-            loginStatusSK.innerText = "Meno už existuje.";
+            loginStatusSK.innerText = "Meno už existuje";
         }
     })
 
+    // editor or spectator logout
     logoutButtonSK.addEventListener("click", () =>{
-        updateEditors();
         let oldRole = user.role;
         user.role = 'visitor';
         user.name = undefined;
+        user.spectated = undefined;
         socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': user.name, 'old_role': oldRole}));
         loggedInFormSK.style.display = 'none';
         loginFormSK.style.display = 'block';
         editorListSK.style.display = 'block';
-
+        loginStatusSK.innerText = "Nie ste prihlásení";
     })
     /*
      */
