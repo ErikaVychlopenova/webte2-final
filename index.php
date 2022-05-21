@@ -73,6 +73,8 @@ require "config/config.php";
 <canvas id="animationCanvas"></canvas>
 
 <script>
+    const socket = new WebSocket('wss://site196.webte.fei.stuba.sk:9000');
+
     const inputButtonSK = document.getElementById("inputButtonSK");
     const inputButtonEN = document.getElementById("inputButtonEN");
     const graphCanvas = document.getElementById("graphCanvas");
