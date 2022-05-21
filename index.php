@@ -81,14 +81,26 @@ require "config/config.php";
         <label for="nameInput-EN">Input name:</label>
         <input id="nameInput-EN" name="name" type="text" required>
         <button type="button" id="buttonName-EN">Log in</button>
-        <p id="loginStatusText-EN"></p>
     </form>
+    <form id="loggedInForm-EN">
+        <button type="button" id="buttonLogout-EN">Log out</button>
+    </form>
+    <p id="loginStatusText-EN">You are not logged in</p>
+    <ul id="editorList-EN"></ul>
 </div>
 
 <canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>
 <canvas id="animationCanvas"></canvas>
 
 <script>
+    let language = "SK";
+    document.getElementById("language").addEventListener("change", () => {
+        language = this.value;
+        setLanguagesWs();
+        if (user.role === "visitor"){
+            loggedInForm.style.display = 'none';
+        }
+    })
     /* WEBSOCKETS START */
     /*
      */
@@ -97,15 +109,58 @@ require "config/config.php";
     let user = {};      // current user
     let editors = [];   // list of active editors
 
-    const loginFormSK = document.getElementById("inputFormName-SK");
+    let loginForm;
+    let loggedInForm;
+    let loginButton;
+    let loginInput;
+    let loginStatus;
+    let editorList;
+    let logoutButton;
+    let loginStatusSpectatorMessage;
+    let editorLoggedInMessage;
+    let editorInvalidNameMessage;
+    let visitorNotLoggedInMessage;
+
+    // set language for inputs buttons and other
+    const setLanguagesWs = () => {
+        if (language === 'SK') {
+            loginForm = document.getElementById("inputFormName-SK");
+            loggedInForm = document.getElementById("loggedInForm-SK");
+            loginButton = document.getElementById("buttonName-SK");
+            loginInput = document.getElementById("nameInput-SK");
+            loginStatus = document.getElementById("loginStatusText-SK");
+            editorList = document.getElementById("editorList-SK");
+            logoutButton = document.getElementById("buttonLogout-SK");
+            loginStatusSpectatorMessage = "Sledujete užívateľa menom: ";
+            editorLoggedInMessage = "Prihlásený pod menom: ";
+            editorInvalidNameMessage = "Nesprávne zadané meno";
+            visitorNotLoggedInMessage = "Môžte sa prihlásiť, alebo sledovať prihláseného užívateľa";
+        }
+        else if (language === 'EN') {
+            loginForm = document.getElementById("inputFormName-EN");
+            loggedInForm = document.getElementById("loggedInForm-EN");
+            loginButton = document.getElementById("buttonName-EN");
+            loginInput = document.getElementById("nameInput-EN");
+            loginStatus = document.getElementById("loginStatusText-EN");
+            editorList = document.getElementById("editorList-EN");
+            logoutButton = document.getElementById("buttonLogout-EN");
+            loginStatusSpectatorMessage = "You are spectating user named: ";
+            editorLoggedInMessage = "Logged in with name: ";
+            editorInvalidNameMessage = "Name is invalid";
+            visitorNotLoggedInMessage = "You can log in, or spectate a logged in user";
+        }
+    }
+
+    setLanguagesWs();
+    loggedInForm.style.display = 'none';
+
+    /*const loginFormSK = document.getElementById("inputFormName-SK");
     const loggedInFormSK = document.getElementById("loggedInForm-SK");
     const loginButtonSK = document.getElementById("buttonName-SK");
     const loginInputSK = document.getElementById("nameInput-SK");
     const loginStatusSK = document.getElementById("loginStatusText-SK");
     const editorListSK = document.getElementById("editorList-SK");
-    const logoutButtonSK = document.getElementById("buttonLogout-SK");
-
-    loggedInFormSK.style.display = 'none';
+    const logoutButtonSK = document.getElementById("buttonLogout-SK");*/
 
     // ws message listener
     socket.addEventListener("message", msg => {
@@ -133,8 +188,31 @@ require "config/config.php";
                     updateEditors();
                     // logout any spectators of this editor
                     if (user.role === 'spectator' && user.spectated === data.id){
-                        logoutButtonSK.click();
+                        logoutButton.click();
                     }
+                }
+            }
+            else if (user.role === 'spectator'){
+                if (data.event === 'edit_calc') {
+                    // update numeric output
+                    document.getElementById("input").innerText = data.input;
+                    if (data.result) {
+                        document.getElementById("outputSK").innerText = data.result;
+                        document.getElementById("outputEN").innerText = data.result;
+                    } else {
+                        document.getElementById("outputSK").innerText = "Chýba príkaz.";
+                        document.getElementById("outputEN").innerText = "Input missing.";
+                    }
+                }
+                else if (data.event === 'edit_graph') {
+                    // TODO resetovanie, opravit vykreslovanie nasledovnych po prvom
+                    document.getElementById("r").innerText = data.input;
+                    x1 = data.x1;
+                    x2 = data.x2;
+                    timer = setInterval(addData, 10);
+                }
+                else if (data.event === 'edit_anim') {
+                    //TODO update animacie
                 }
             }
         }
@@ -143,7 +221,7 @@ require "config/config.php";
     // force logout before exiting / refreshing page
     window.addEventListener("beforeunload", () => {
         if (user.role === 'editor' || user.role === 'spectator'){
-            logoutButtonSK.click();
+            logoutButton.click();
         }
     })
 
@@ -161,10 +239,10 @@ require "config/config.php";
     // update list of editors
     const updateEditors = () => {
         if (editors) {
-            let child = editorListSK.lastElementChild;
+            let child = editorList.lastElementChild;
             while (child) {
-                editorListSK.removeChild(child);
-                child = editorListSK.lastElementChild;
+                editorList.removeChild(child);
+                child = editorList.lastElementChild;
             }
         }
         editors.forEach(editor => {
@@ -178,44 +256,62 @@ require "config/config.php";
                 user.spectated = editor.id;
                 socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'old_role': oldRole,
                     'spectated': user.spectated}));
-                loginFormSK.style.display = 'none';
-                loggedInFormSK.style.display = 'block';
-                editorListSK.style.display = 'none';
-                loginStatusSK.innerText = "Sledujete užívateľa menom: "+editor.name;
+                loginForm.style.display = 'none';
+                loggedInForm.style.display = 'block';
+                editorList.style.display = 'none';
+                loginStatus.innerText = loginStatusSpectatorMessage+editor.name;
+                // spectator cannot edit -> disable all buttons and inputs
+                inputButtonSK.disabled = true;
+                inputButtonEN.disabled = true;
+                inputRbuttonSK.disabled = true;
+                inputRbuttonEN.disabled = true;
+                emailButtonSK.disabled = true;
+                emailButtonEN.disabled = true;
+                document.getElementById("input").disabled = true;
+                document.getElementById("r").disabled = true;
             })
-            editorListSK.appendChild(li);
+            editorList.appendChild(li);
         })
     }
 
     // editor login
-    loginButtonSK.addEventListener("click", () =>{
-        const data = new FormData(loginFormSK);
+    loginButton.addEventListener("click", () =>{
+        const data = new FormData(loginForm);
         let name = data.get('name');
         if (name && !findInEditors(name)){
             let oldRole = user.role;
             user.role = 'editor';
             user.name = name;
             socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': name, 'old_role': oldRole}));
-            loginFormSK.style.display = 'none';
-            loggedInFormSK.style.display = 'block';
-            editorListSK.style.display = 'none';
-            loginStatusSK.innerText = "Prihlásený pod menom: "+name;
+            loginForm.style.display = 'none';
+            loggedInForm.style.display = 'block';
+            editorList.style.display = 'none';
+            loginStatus.innerText = editorLoggedInMessage+name;
         } else {
-            loginStatusSK.innerText = "Meno už existuje";
+            loginStatus.innerText = editorInvalidNameMessage;
         }
     })
 
     // editor or spectator logout
-    logoutButtonSK.addEventListener("click", () =>{
+    logoutButton.addEventListener("click", () =>{
         let oldRole = user.role;
         user.role = 'visitor';
         user.name = undefined;
         user.spectated = undefined;
         socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': user.name, 'old_role': oldRole}));
-        loggedInFormSK.style.display = 'none';
-        loginFormSK.style.display = 'block';
-        editorListSK.style.display = 'block';
-        loginStatusSK.innerText = "Nie ste prihlásení";
+        loggedInForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        editorList.style.display = 'block';
+        loginStatus.innerText = visitorNotLoggedInMessage;
+        // enable all buttons and inputs
+        inputButtonSK.disabled = false;
+        inputButtonEN.disabled = false;
+        inputRbuttonSK.disabled = false;
+        inputRbuttonEN.disabled = false;
+        emailButtonSK.disabled = false;
+        emailButtonEN.disabled = false;
+        document.getElementById("input").disabled = false;
+        document.getElementById("r").disabled = false;
     })
     /*
      */
@@ -246,11 +342,14 @@ require "config/config.php";
                     response.json().then( result => {
                         document.getElementById("outputSK").innerText = result["output"];
                         document.getElementById("outputEN").innerText = result["output"];
+                        socket.send(JSON.stringify({'event': 'edit_calc', 'input': data.get('input'),
+                            'result': result["output"]}));
                     })
                 }
                 else{
                     document.getElementById("outputSK").innerText = "Chýba príkaz.";
                     document.getElementById("outputEN").innerText = "Input missing.";
+                    socket.send(JSON.stringify({'event': 'edit_calc', 'result': false}));
                 }
 
             })
@@ -274,6 +373,8 @@ require "config/config.php";
                         x1 = result["x1"];
                         x2 = result["x2"];
                         timer = setInterval(addData, 10);
+                        socket.send(JSON.stringify({'event': 'edit_graph', 'input': r,
+                            'x1': result["x1"], 'x2': result["x2"]}));
                     })
                 }
             })
