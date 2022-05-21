@@ -49,6 +49,16 @@ require "config/config.php";
         <button type="button" id="emailButtonSK">Odošli email</button>
         <p id="emailResponseSK"></p>
     </form>
+    <form id="inputFormName-SK">
+        <label for="nameInput-SK">Zadaj meno:</label>
+        <input id="nameInput-SK" name="name" type="text" required>
+        <button type="button" id="buttonName-SK">Prihlásiť sa</button>
+    </form>
+    <form id="loggedInForm-SK">
+        <button type="button" id="buttonLogout-SK">Odhlásiť sa</button>
+    </form>
+    <p id="loginStatusText-SK">Nie ste prihlásení.</p>
+    <ul id="editorList-SK"></ul>
 </div>
 
 <div id="langEN">
@@ -67,13 +77,132 @@ require "config/config.php";
         <button type="button" id="emailButtonEN">Send email</button>
         <p id="emailResponseEN"></p>
     </form>
+    <form id="inputFormName-EN">
+        <label for="nameInput-EN">Input name:</label>
+        <input id="nameInput-EN" name="name" type="text" required>
+        <button type="button" id="buttonName-EN">Log in</button>
+        <p id="loginStatusText-EN"></p>
+    </form>
 </div>
 
 <canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>
 <canvas id="animationCanvas"></canvas>
 
 <script>
+    /* WEBSOCKETS START */
+    /*
+     */
     const socket = new WebSocket('wss://site196.webte.fei.stuba.sk:9000');
+
+    let user = {};
+    let editors = [];
+
+    socket.addEventListener("message", msg => {
+        const data = JSON.parse(msg.data);
+        if ('event' in data) {
+            if (data.event === 'new_user') {
+                user.id = data.id;
+                user.role = data.role;
+            }
+            else if (data.event === 'change_role'){
+                if (data.role === 'editor') {
+                    editors.push({'id': data.id, 'role': data.role, 'name': data.name})
+                    updateEditors();
+                } else if (data.role === 'visitor' && data.old_role === 'editor'){
+                    editors.forEach(editor => {
+                        if (editor.id === data.id){
+                            let index = editors.indexOf(editor);
+                            if (index !== -1) {
+                                editors.splice(index, 1);
+                            }
+                        }
+                    })
+                    updateEditors();
+                }
+            }
+        }
+    })
+
+    window.addEventListener("beforeunload", () => {
+        if (user.role === 'editor'){
+            logoutButtonSK.click();
+        }
+    })
+
+    const findInEditors = (name) => {
+        let flag = false;
+        editors.forEach(editor => {
+            if (editor.name === name){
+                flag = true;
+            }
+        })
+        return flag;
+    }
+
+
+    const loginFormSK = document.getElementById("inputFormName-SK");
+    const loggedInFormSK = document.getElementById("loggedInForm-SK");
+    const loginButtonSK = document.getElementById("buttonName-SK");
+    const loginInputSK = document.getElementById("nameInput-SK");
+    const loginStatusSK = document.getElementById("loginStatusText-SK");
+    const editorListSK = document.getElementById("editorList-SK");
+    const logoutButtonSK = document.getElementById("buttonLogout-SK");
+
+    loggedInFormSK.style.display = 'none';
+
+    const updateEditors = () => {
+        if (editors) {
+            let child = editorListSK.lastElementChild;
+            while (child) {
+                editorListSK.removeChild(child);
+                child = editorListSK.lastElementChild;
+            }
+        }
+        editors.forEach(editor => {
+            let li = document.createElement("li");
+            li.innerText = editor.name;
+            li.style.cursor = "pointer";
+            li.addEventListener("click", () => {
+
+            })
+            editorListSK.appendChild(li);
+        })
+    }
+
+    loginButtonSK.addEventListener("click", () =>{
+        const data = new FormData(loginFormSK);
+        let name = data.get('name');
+        if (name && !findInEditors(name)){
+            let oldRole = user.role;
+            user.role = 'editor';
+            user.name = name;
+            socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': name, 'old_role': oldRole}));
+            loginFormSK.style.display = 'none';
+            loggedInFormSK.style.display = 'block';
+            editorListSK.style.display = 'none';
+            loginStatusSK.innerText = "Prihlásený pod menom: "+name;
+        } else {
+            loginStatusSK.innerText = "Meno už existuje.";
+        }
+    })
+
+    logoutButtonSK.addEventListener("click", () =>{
+        updateEditors();
+        let oldRole = user.role;
+        user.role = 'visitor';
+        user.name = undefined;
+        socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': user.name, 'old_role': oldRole}));
+        loggedInFormSK.style.display = 'none';
+        loginFormSK.style.display = 'block';
+        editorListSK.style.display = 'block';
+
+    })
+    /*
+     */
+    /* WEBSOCKETS END */
+
+
+
 
     const inputButtonSK = document.getElementById("inputButtonSK");
     const inputButtonEN = document.getElementById("inputButtonEN");
