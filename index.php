@@ -57,7 +57,7 @@ require "config/config.php";
     <form id="loggedInForm-SK">
         <button type="button" id="buttonLogout-SK">Odhlásiť sa</button>
     </form>
-    <p id="loginStatusText-SK">Nie ste prihlásení</p>
+    <p id="loginStatusText-SK">Nie ste prihlásený</p>
     <ul id="editorList-SK"></ul>
 </div>
 
@@ -70,7 +70,7 @@ require "config/config.php";
     </form>
     <form id="inputFormR-EN">
         <label for="r">Type r:</label>
-        <input id="r" name="r" type="number">
+        <input id="r" name="r" type="number" step="0.01">
         <button type="button" id="buttonR-EN">Send r</button>
     </form>
     <form>
@@ -87,6 +87,7 @@ require "config/config.php";
     </form>
     <p id="loginStatusText-EN">You are not logged in</p>
     <ul id="editorList-EN"></ul>
+
 </div>
 
 <canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>
@@ -361,49 +362,12 @@ require "config/config.php";
     let timer;
     let index = 0;
     let r;
-    inputRbuttonSK.addEventListener("click", () => {
-        const form = document.getElementById("inputFormR-SK");
-        const data = new FormData(form);
-        r = data.get('r');
-        fetch("api.php?api_key="+key+"&r="+r, {method: "GET"})
-            .then(response => {
-                if(response.status === 200){
-                    index = 0;
-                    response.json().then(result => {
-                        x1 = result["x1"];
-                        x2 = result["x2"];
-                        timer = setInterval(addData, 10);
-                        socket.send(JSON.stringify({'event': 'edit_graph', 'input': r,
-                            'x1': result["x1"], 'x2': result["x2"]}));
-                    })
-                }
-            })
-    })
 
     let oldValuesX1 = [r];
     let oldValuesX2 = [r];
     let oldLabels = [0];
 
-    function addData() {
-        let newDataX1 = x1[index];
-        let newDataX2 = x2[index];
-        let newRecord = {
-            data: {
-                x1: newDataX1,
-                x2: newDataX2
-            }
-        }
-        oldValuesX1.push(newRecord.data.x1);
-        oldValuesX2.push(newRecord.data.x2)
-        oldLabels.push(index);
-        graph.update();
-        index++;
-        if(index === x1.length){
-            clearInterval(timer);
-        }
-    }
-
-    const graph = new Chart("graphCanvas", {
+    let config = {
         type: 'line',
         data: {
             labels : oldLabels,
@@ -412,19 +376,105 @@ require "config/config.php";
                     label: "X1",
                     data: oldValuesX1,
                     borderColor: 'rgb(194,20,51)',
-                    tension: 0.5,
+                    // tension: 0.5,
                 },
                 {
                     label: "X2",
                     data: oldValuesX2,
                     borderColor: 'rgb(0,73,255)',
-                    tension: 0.5,
+                    // tension: 0.5,
                 }
             ]
         },
         options: {}
-    });
+    }
 
+    let graph = new Chart("graphCanvas", config);
+
+    inputRbuttonSK.addEventListener("click", () => {
+        if(isDrawing) {return;}
+        resetData();
+        const form = document.getElementById("inputFormR-SK");
+        const data = new FormData(form);
+        r = data.get('r');
+        fetch("api.php?api_key="+key+"&r="+r, {method: "GET", headers:{'content-type': 'application/json'}})
+            .then(response => response.json())
+            .then(result => {
+                inputRbuttonSK.disabled = true;
+                inputRbuttonEN.disabled = true;
+                console.log(result);
+                index = 0;
+                x1 = result["x1"];
+                x2 = result["x2"];
+                addData();
+               socket.send(JSON.stringify({
+                   'event': 'edit_graph', 'input': r,
+                   'x1': result["x1"], 'x2': result["x2"]
+               }));
+            })
+    })
+
+    inputRbuttonEN.addEventListener("click", () => {
+        if(isDrawing) {return;}
+        resetData();
+        const form = document.getElementById("inputFormR-EN");
+        const data = new FormData(form);
+        r = data.get('r');
+        fetch("api.php?api_key="+key+"&r="+r, {method: "GET", headers:{'content-type': 'application/json'}})
+            .then(response => response.json())
+            .then(result => {
+                inputRbuttonEN.disabled = true;
+                inputRbuttonSK.disabled = true;
+                console.log(result);
+                index = 0;
+                x1 = result["x1"];
+                x2 = result["x2"];
+                addData();
+                socket.send(JSON.stringify({
+                    'event': 'edit_graph', 'input': r,
+                    'x1': result["x1"], 'x2': result["x2"]
+                }));
+            })
+    })
+
+    let newDataX1;
+    let newDataX2;
+    let isDrawing = false;
+
+    function addData() {
+        if(isDrawing === false) {
+            timer = setInterval(() => {
+                isDrawing = true;
+                newDataX1 = x1[index];
+                newDataX2 = x2[index];
+                oldValuesX1.push(newDataX1);
+                oldValuesX2.push(newDataX2)
+                oldLabels.push(index);
+                graph.update();
+                index++;
+                console.log(index, x1.length);
+                console.log(oldValuesX1);
+                if (index > x1.length) {
+                    clearInterval(timer);
+                    isDrawing = false;
+                    inputRbuttonSK.disabled = false;
+                    inputRbuttonEN.disabled = false;
+                }
+            }, 5)
+        }
+    }
+
+    function resetData(){
+        // graph.destroy();
+        index = 0;
+        oldValuesX1 = [];
+        oldValuesX2 = [];
+        oldLabels = [];
+        graph.data.datasets[0].data = oldValuesX1;
+        graph.data.datasets[1].data = oldValuesX2;
+        graph.data.labels = oldLabels;
+        graph.update();
+    }
 
 
     const emailButtonSK = document.getElementById("emailButtonSK");
