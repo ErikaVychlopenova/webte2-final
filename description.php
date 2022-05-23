@@ -18,8 +18,8 @@
 <nav>
     <div class="navbar">
         <ul>
-            <li><a href="index.php">Hlavná stránka</a></li>
-            <li><a href="description.php">Popis API</a></li>
+            <li><a href="index.php" id="main">Hlavná stránka</a></li>
+            <li><a href="description.php" id="desc">Popis API</a></li>
         </ul>
     </div>
 </nav>

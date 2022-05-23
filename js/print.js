@@ -6,15 +6,21 @@ function selectLangAPI(value){
     lang = value;
     let divSK = document.getElementById("contentSK");
     let divEN = document.getElementById("contentEN");
+    let main = document.getElementById("main");
+    let desc = document.getElementById("desc");
 
     if(value === "SK"){
         divSK.style.display = "block";
         divEN.style.display = "none";
+        main.innerHTML = "Hlavná stránka";
+        desc.innerHTML = "Popis API";
 
     }
     if(value === "EN"){
         divEN.style.display = "block";
         divSK.style.display = "none";
+        main.innerHTML = "Main site";
+        desc.innerHTML = "API description";
     }
 }
 
