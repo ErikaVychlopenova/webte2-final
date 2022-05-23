@@ -91,7 +91,121 @@ require "config/config.php";
 </div>
 
 <canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>
-<canvas id="animationCanvas"></canvas>
+<canvas id="animationCanvas" width="300" height="500"></canvas>
+
+<style>
+    #animationCanvas {
+        margin:20px auto;
+        border:1px solid #333;
+    }
+</style>
+<script>
+    var canvas;
+    var ctx;
+    var width  = 300;
+    var height = 500;
+
+    var block_m1_x = width/2 - 40;
+    var block_m1_y = 300;
+
+    var block_m2_x = width/2 - 40;
+    var block_m2_y = 130;
+
+    var frameRate  = 1/30;
+    var frameDelay = frameRate * 1000;
+
+
+    var loop = function() {
+
+        // KRESLENIE
+        ctx.clearRect(0, 0, width, height);
+        ctx.save();
+
+
+        // ZEM
+        ctx.fillStyle = '#CCCCCC';
+        ctx.fillRect(0, height-20, width, 20);
+
+
+        // pružina 1
+        for (y = height - 20 ; y > block_m1_y + 30; y -= 20)
+        {
+            ctx.strokeStyle = 'black';
+            ctx.beginPath();
+            ctx.moveTo(width/2 -10, y);
+            ctx.lineTo(block_m1_x + 15 , y - 10);
+            ctx.lineTo(block_m1_x + 30, y - 20);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        // pružina 2
+        for (y = block_m1_y ; y > block_m2_y + 30; y -= 20)
+        {
+            ctx.strokeStyle = 'black';
+            ctx.beginPath();
+            ctx.moveTo(width/2 -10, y);
+            ctx.lineTo(block_m1_x + 15 , y - 10);
+            ctx.lineTo(block_m1_x + 30, y - 20);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+
+
+        // ČIARA M1
+        ctx.strokeStyle = 'black';
+        ctx.beginPath();
+        ctx.moveTo(width/2 + 10, height - 20);
+        ctx.lineTo(block_m1_x + 50, block_m1_y + 40);
+        ctx.stroke();
+        ctx.closePath();
+
+        // ČIARA M2
+        ctx.strokeStyle = 'black';
+        ctx.beginPath();
+        ctx.moveTo(width/2 + 10, block_m1_y);
+        ctx.lineTo(block_m2_x + 50, block_m2_y + 40);
+        ctx.stroke();
+        ctx.closePath();
+
+
+        // M1
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(block_m1_x , block_m1_y , 80, 40);
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(block_m1_x , block_m1_y , 80, 40);
+        ctx.lineWidth = 1;
+        ctx.fillStyle = "white";
+        ctx.font = "18px Verdana";
+        ctx.fillText("m1", block_m1_x + 25 , block_m1_y + 25);
+
+
+        // M2
+        ctx.fillStyle = 'red';
+        ctx.fillRect(block_m2_x , block_m2_y , 80, 40);
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(block_m2_x , block_m2_y , 80, 40);
+        ctx.lineWidth = 1;
+        ctx.fillStyle = "white";
+        ctx.font = "18px Verdana";
+        ctx.fillText("m2", block_m2_x + 25 , block_m2_y + 25);
+
+        ctx.restore();
+
+    };
+
+    var setup = function() {
+        canvas = document.getElementById('animationCanvas');
+        ctx = canvas.getContext('2d');
+
+        setInterval(loop, frameDelay);
+    };
+
+    setup();
+</script>
 
 <script>
     let language = "SK";
