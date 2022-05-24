@@ -266,7 +266,7 @@ require "config/config.php";
                 block_m1_y = 300;
                 block_m1_y += oldValuesX1[i] * 2000;
                 block_m2_y = 130;
-                block_m2_y += oldValuesX2[i] * 10000;
+                block_m2_y += oldValuesX2[i] * 2000;
 
                 for (let y = height - 20; y > block_m1_y + 30; y -= 20) {
                     ctx.strokeStyle = 'black';
@@ -825,8 +825,8 @@ require "config/config.php";
                 oldLabels.push(index);
                 graph.update();
                 index++;
-                console.log(index, x1.length);
-                console.log(oldValuesX1);
+                // console.log(index, x1.length);
+                // console.log(oldValuesX1);
                 if (index > x1.length) {
                     clearInterval(timer);
                     isDrawing = false;
