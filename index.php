@@ -327,7 +327,7 @@ require "config/config.php";
         language = this.value;
     })
 
-    const socket = new WebSocket('wss://site196.webte.fei.stuba.sk:9000');
+    const socket = new WebSocket('wss://site166.webte.fei.stuba.sk:8999');
 
     let user = {};      // current user
     let editors = [];   // list of active editors

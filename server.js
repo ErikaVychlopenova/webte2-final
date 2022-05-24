@@ -3,12 +3,12 @@ const https = require('https');
 const fs = require('fs');
 
 const server = https.createServer({
-    cert: fs.readFileSync("/home/xvychlopenova/webte.fei.stuba.sk-chain-cert.pem"),
-    key: fs.readFileSync("/home/xvychlopenova/webte.fei.stuba.sk.key")
+    cert: fs.readFileSync("/home/xsalata/webte.fei.stuba.sk-chain-cert.pem"),
+    key: fs.readFileSync("/home/xsalata/webte.fei.stuba.sk.key")
 
 })
 
-server.listen(9000)
+server.listen(8999)
 
 const ws = new WebSocket.Server({server});
 

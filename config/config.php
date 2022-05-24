@@ -1,8 +1,8 @@
 <?php
 
 $servername = "localhost";
-$username = "xvychlopenova";
-$password = "heslo";
+$username = "xsalata";
+$password = "hesloheslo";
 $dbname = "final";
 $api_key = "our_api_key";
 $email = 'pvpsammi@gmail.com';
