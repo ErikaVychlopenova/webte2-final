@@ -123,8 +123,8 @@
 
     <div id="contentEN" style="display: none">
         <h2>How we divided our tasks:</h2>
-        <div class="part">
-            <div class="part">
+        <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
                 <h4>xvychlopenova:</h4>
                 <ul>
                     <li>Bilingual site</li>
