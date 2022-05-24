@@ -142,6 +142,7 @@ require "config/config.php";
         ctx.fillRect(0, height-20, width, 20);
 
         // KOLESO
+        /*
         ctx.beginPath();
         ctx.arc(150, 340, 140, 0, 2 * Math.PI);
         ctx.strokeStyle = "black";
@@ -150,9 +151,10 @@ require "config/config.php";
         ctx.lineWidth = 1;
         ctx.fillStyle = '#6e7377';
         ctx.fill();
+        */
 
         // pružina 1
-        for (y = height - 20 ; y > block_m1_y + 30; y -= 20)
+        for (y = 0 ; y < block_m1_y; y += 20)
         {
             ctx.strokeStyle = 'black';
             ctx.beginPath();
@@ -162,7 +164,7 @@ require "config/config.php";
             ctx.stroke();
             ctx.closePath();
         }
-        for (y = height - 20 ; y > block_m1_y + 30; y -= 20)
+        for (y = 0 ; y < block_m1_y; y += 20)
         {
             ctx.strokeStyle = 'black';
             ctx.beginPath();
@@ -198,8 +200,8 @@ require "config/config.php";
         // ČIARA M1
         ctx.strokeStyle = 'black';
         ctx.beginPath();
-        ctx.moveTo(width/2 + 10, height - 20);
-        ctx.lineTo(block_m1_x + 50, block_m1_y + 40);
+        ctx.moveTo(width/2 + 10, 0);
+        ctx.lineTo(block_m1_x + 50, block_m2_y);
         ctx.stroke();
         ctx.closePath();
 
@@ -252,6 +254,7 @@ require "config/config.php";
                 ctx.fillRect(0, height - 20, width, 20);
 
                 // KOLESO
+                /*
                 ctx.beginPath();
                 ctx.arc(150, 340, 140, 0, 2 * Math.PI);
                 ctx.strokeStyle = "black";
@@ -260,6 +263,7 @@ require "config/config.php";
                 ctx.lineWidth = 1;
                 ctx.fillStyle = '#6e7377';
                 ctx.fill();
+                 */
 
                 // pružina 1
 
@@ -268,16 +272,18 @@ require "config/config.php";
                 block_m2_y = 130;
                 block_m2_y += oldValuesX2[i] * 2000;
 
-                for (let y = height - 20; y > block_m1_y + 30; y -= 20) {
+                // pružina 1
+                for (y = 0 ; y < block_m1_y; y += 20)
+                {
                     ctx.strokeStyle = 'black';
                     ctx.beginPath();
-                    ctx.moveTo(width / 2 - 10, y);
-                    ctx.lineTo(block_m1_x + 15, y - 10);
+                    ctx.moveTo(width/2 -10, y);
+                    ctx.lineTo(block_m1_x + 15 , y - 10);
                     ctx.lineTo(block_m1_x + 30, y - 20);
                     ctx.stroke();
                     ctx.closePath();
                 }
-                for (y = height - 20 ; y > block_m1_y + 30; y -= 20)
+                for (y = 0 ; y < block_m1_y; y += 20)
                 {
                     ctx.strokeStyle = 'black';
                     ctx.beginPath();
@@ -312,8 +318,8 @@ require "config/config.php";
                 // ČIARA M1
                 ctx.strokeStyle = 'black';
                 ctx.beginPath();
-                ctx.moveTo(width / 2 + 10, height - 20);
-                ctx.lineTo(block_m1_x + 50, block_m1_y + 40);
+                ctx.moveTo(width/2 + 10, 0);
+                ctx.lineTo(block_m1_x + 50, block_m2_y);
                 ctx.stroke();
                 ctx.closePath();
 
