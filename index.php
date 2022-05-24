@@ -59,6 +59,7 @@ require "config/config.php";
     </form>
     <p id="loginStatusText-SK">Nie ste prihlásený</p>
     <ul id="editorList-SK"></ul>
+
 </div>
 
 <div id="langEN">
@@ -88,6 +89,13 @@ require "config/config.php";
     <p id="loginStatusText-EN">You are not logged in</p>
     <ul id="editorList-EN"></ul>
 
+</div>
+
+<div id="choice">
+    <label for="checkGraph">graph</label>
+    <input type="checkbox" id="checkGraph" onclick="checkChoiceValue()">
+    <label for="checkAnim">anim</label>
+    <input type="checkbox" id="checkAnim" onclick="checkChoiceValue()">
 </div>
 
 <canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>

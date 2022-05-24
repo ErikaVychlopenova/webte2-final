@@ -2,14 +2,7 @@
 <project version="4">
   <component name="PublishConfigData" autoUpload="Always" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="xlavrincikb">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="xvychlopenova">
+      <paths name="xvychlopenova@147.175.98.196">
         <serverdata>
           <mappings>
             <mapping deploy="/webte2-final" local="$PROJECT_DIR$" web="/webte2-final" />
