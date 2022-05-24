@@ -834,6 +834,9 @@ require "config/config.php";
         const form = document.getElementById("inputFormR-EN");
         const data = new FormData(form);
         r = data.get('r');
+        socket.send(JSON.stringify({
+            'event': 'reset_graph', 'input': r, 'oldValuesX1': oldValuesX1, 'oldValuesX2': oldValuesX2
+        }));
         fetch("api.php?api_key="+key+"&r="+r, {method: "GET", headers:{'content-type': 'application/json'}})
             .then(response => response.json())
             .then(result => {
@@ -845,7 +848,7 @@ require "config/config.php";
                 x2 = result["x2"];
                 addData();
                 socket.send(JSON.stringify({
-                    'event': 'edit_graph', 'input': r,
+                    'event': 'edit_graph',
                     'x1': result["x1"], 'x2': result["x2"]
                 }));
             })
