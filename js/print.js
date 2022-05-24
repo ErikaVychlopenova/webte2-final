@@ -1,5 +1,5 @@
 
-let lang;
+let lang = "SK";
 
 function selectLangAPI(value){
 
