@@ -26,13 +26,16 @@
     <li class="nav-item">
         <a class="nav-link active" href="description.php" id="desc">Popis API</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="documentation.php" id="doc">Dokumentácia</a>
+    </li>
 </ul>
 
 
 
     <label for="language"></label>
     <select class="form-select w-auto mb-4 mt-2" name="language" id="language" onchange="selectLangAPI(this.value)">
-        <option value="SK">SK</option>
+        <option value="SK" selected>SK</option>
         <option value="EN">EN</option>
     </select>
 
@@ -45,7 +48,7 @@
             <p>Vráti vyrátanú hodnotu</p>
             <p>Telo</p>
             <pre>
-                Example
+                Príklad
                     [{
                         "input": string
                     }]
@@ -95,7 +98,7 @@
         </div>
     </div>
 
-    <div id="contentEN">
+    <div id="contentEN" style="display: none">
         <div class="part">
             <h2>POST /api.php?api_key={api_key}</h2>
             <p>Returns calculated value</p>
@@ -153,7 +156,7 @@
 
 
 
-<footer>© 2022 Vychlopeňová, Šalata, Lavrinčík, Masaryk</footer>
+<footer>© 2022 xvychlopenova, xsalata, xlavrincikb, xmasarykm1</footer>
 
 </body>
 </html>

@@ -19,11 +19,12 @@ function selectLang(value){
     let divEN = document.getElementById("langEN");
     let main = document.getElementById("main");
     let desc = document.getElementById("desc");
-
+    let doc = document.getElementById("doc");
     if(value === "SK"){
         nadpis.innerHTML = "Tlmič automobilu";
         main.innerHTML = "Hlavná stránka";
         desc.innerHTML = "Popis API";
+        doc.innerHTML = "Dokumentácia";
         divSK.style.display = "block";
         divEN.style.display = "none";
 
@@ -32,6 +33,7 @@ function selectLang(value){
         nadpis.innerHTML = "Car suspension";
         main.innerHTML = "Main site";
         desc.innerHTML = "API description";
+        doc.innerHTML = "Documentation";
         divSK.style.display = "none";
         divEN.style.display = "block";
     }

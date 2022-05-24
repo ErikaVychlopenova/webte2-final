@@ -26,6 +26,9 @@ require "config/config.php";
     <li class="nav-item">
         <a class="nav-link" href="description.php" id="desc">Popis API</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="documentation.php" id="doc">Dokumentácia</a>
+    </li>
 </ul>
 
 <div class="main">
@@ -62,14 +65,14 @@ require "config/config.php";
                 <textarea id="inputSK" name="input"></textarea>
                 <button type="button" class="btn btn-primary" id="inputButtonSK">Vyrátaj</button>
             </div>
-            <p id="outputSK">Tu bude output</p>
+            <p id="outputSK"></p>
         </form>
 
         <form id="inputFormR-SK">
             <h4>Graf a animácia</h4>
             <div class="input-group">
                 <label class="input-group-text" for="rSK">Zadaj r:</label>
-                <input id="rSK" name="r" type="number" step="0.01">
+                <input id="rSK" name="r" type="number" step="0.01" min="-0.7" max="0.7">
                 <button class="btn btn-primary" type="button" id="buttonR-SK">Odošli r</button>
             </div>
         </form>
@@ -106,14 +109,14 @@ require "config/config.php";
                 <textarea id="inputEN" name="input"></textarea>
                 <button type="button" class="btn btn-primary" id="inputButtonEN">Calculate</button>
             </div>
-            <p id="outputEN">Here should be the output</p>
+            <p id="outputEN"></p>
         </form>
 
         <form id="inputFormR-EN">
             <h4>Graph and animation</h4>
             <div class="input-group">
                 <label class="input-group-text" for="rEN">Type r:</label>
-                <input id="rEN" name="r" type="number" step="0.01">
+                <input id="rEN" name="r" type="number" step="0.01" min="-0.7" max="0.7">
                 <button class="btn btn-primary" type="button" id="buttonR-EN">Send r</button>
             </div>
         </form>
@@ -137,7 +140,7 @@ require "config/config.php";
 
 </div>
 
-<footer>© 2022 Vychlopeňová, Šalata, Lavrinčík, Masaryk</footer>
+<footer>© 2022 xvychlopenova, xsalata, xlavrincikb, xmasarykm1</footer>
 
 <script>
 
@@ -392,7 +395,7 @@ require "config/config.php";
                     document.getElementById("rEN").value = data.input;
                     oldValuesX1 = data.x1;
                     oldValuesX2 = data.x2;
-                    animationLoop();
+                   // animationLoop();
                     resetData();
                 }
                 // graph update
@@ -639,8 +642,13 @@ require "config/config.php";
             .then(response => {
                 if(response.status === 200){
                     response.json().then( result => {
-                        document.getElementById("outputSK").innerText = result["output"];
-                        document.getElementById("outputEN").innerText = result["output"];
+                        if(result["output"] === ""){
+                            document.getElementById("outputSK").innerText = "Nastala chyba vo výpočte";
+                            document.getElementById("outputEN").innerText = "A calculation error occurred";
+                        }else {
+                            document.getElementById("outputSK").innerText = result["output"];
+                            document.getElementById("outputEN").innerText = result["output"];
+                        }
                         socket.send(JSON.stringify({'event': 'edit_calc', 'input': data.get('input'),
                             'result': result["output"]}));
                     })
@@ -718,7 +726,7 @@ require "config/config.php";
 
     inputRbuttonEN.addEventListener("click", () => {
         if(isDrawing) {return;}
-        animationLoop();
+       // animationLoop();
         resetData();
         const form = document.getElementById("inputFormR-EN");
         const data = new FormData(form);
@@ -780,9 +788,9 @@ require "config/config.php";
                 // pružina 1
 
                 block_m1_y = 300;
-                block_m1_y += newDataX1 * 500;
+                block_m1_y += newDataX1 * 300;
                 block_m2_y = 130;
-                block_m2_y += newDataX2 * 500;
+                block_m2_y += newDataX2 * 300;
 
                 // pružina 1
                 for (y = 0 ; y < block_m2_y + 20; y += 20)
