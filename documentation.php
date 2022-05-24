@@ -42,7 +42,7 @@
     <div id="contentSK">
         <h2>Rozdelenie úloh:</h2>
         <div class="part border border-primary p-5 border-5 mb-2 mt-2">
-            <div class="part">
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
                 <h4>xvychlopenova:</h4>
                 <ul>
                     <li>Dvojjazyčnosť</li>
