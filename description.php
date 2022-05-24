@@ -28,10 +28,10 @@
     </li>
 </ul>
 
-<div class="main">
+
 
     <label for="language"></label>
-    <select class="form-select w-auto mb-4 mt-2" name="language" id="language" onchange="selectLang(this.value)">
+    <select class="form-select w-auto mb-4 mt-2" name="language" id="language" onchange="selectLangAPI(this.value)">
         <option value="SK">SK</option>
         <option value="EN">EN</option>
     </select>
@@ -151,7 +151,7 @@
         </div>
     </div>
 
-</div>
+
 
 <footer>© 2022 Vychlopeňová, Šalata, Lavrinčík, Masaryk</footer>
 
