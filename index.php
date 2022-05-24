@@ -103,7 +103,7 @@ require "config/config.php";
 <script>
 
     // ANIMACIA
-    let frameRate  = 3/30;
+    let frameRate  = 1/15;
     let frameDelay = frameRate * 1000;
     let t;
 
@@ -133,6 +133,15 @@ require "config/config.php";
         ctx.fillStyle = '#CCCCCC';
         ctx.fillRect(0, height-20, width, 20);
 
+        // KOLESO
+        ctx.beginPath();
+        ctx.arc(150, 340, 140, 0, 2 * Math.PI);
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        ctx.lineWidth = 1;
+        ctx.fillStyle = '#6e7377';
+        ctx.fill();
 
         // pružina 1
         for (y = height - 20 ; y > block_m1_y + 30; y -= 20)
@@ -145,6 +154,16 @@ require "config/config.php";
             ctx.stroke();
             ctx.closePath();
         }
+        for (y = height - 20 ; y > block_m1_y + 30; y -= 20)
+        {
+            ctx.strokeStyle = 'black';
+            ctx.beginPath();
+            ctx.moveTo(width/2 - 25, y);
+            ctx.lineTo(block_m1_x + 30, y - 10);
+            ctx.lineTo(block_m1_x + 15, y - 20);
+            ctx.stroke();
+            ctx.closePath();
+        }
 
         // pružina 2
         for (y = block_m1_y ; y > block_m2_y + 30; y -= 20)
@@ -154,6 +173,16 @@ require "config/config.php";
             ctx.moveTo(width/2 -10, y);
             ctx.lineTo(block_m1_x + 15 , y - 10);
             ctx.lineTo(block_m1_x + 30, y - 20);
+            ctx.stroke();
+            ctx.closePath();
+        }
+        for (y = block_m1_y ; y > block_m2_y + 30; y -= 20)
+        {
+            ctx.strokeStyle = 'black';
+            ctx.beginPath();
+            ctx.moveTo(width/2 - 25, y);
+            ctx.lineTo(block_m1_x + 30, y - 10);
+            ctx.lineTo(block_m1_x + 15, y - 20);
             ctx.stroke();
             ctx.closePath();
         }
@@ -214,6 +243,16 @@ require "config/config.php";
                 ctx.fillStyle = '#CCCCCC';
                 ctx.fillRect(0, height - 20, width, 20);
 
+                // KOLESO
+                ctx.beginPath();
+                ctx.arc(150, 340, 140, 0, 2 * Math.PI);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                ctx.lineWidth = 1;
+                ctx.fillStyle = '#6e7377';
+                ctx.fill();
+
                 // pružina 1
                 block_m1_y = 300;
                 block_m1_y += oldValuesX2[i] * 15000;
@@ -228,6 +267,16 @@ require "config/config.php";
                     ctx.stroke();
                     ctx.closePath();
                 }
+                for (y = height - 20 ; y > block_m1_y + 30; y -= 20)
+                {
+                    ctx.strokeStyle = 'black';
+                    ctx.beginPath();
+                    ctx.moveTo(width/2 - 25, y);
+                    ctx.lineTo(block_m1_x + 30, y - 10);
+                    ctx.lineTo(block_m1_x + 15, y - 20);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
 
                 // pružina 2
                 for (let y = block_m1_y; y > block_m2_y + 30; y -= 20) {
@@ -236,6 +285,16 @@ require "config/config.php";
                     ctx.moveTo(width / 2 - 10, y);
                     ctx.lineTo(block_m1_x + 15, y - 10);
                     ctx.lineTo(block_m1_x + 30, y - 20);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+                for (y = block_m1_y ; y > block_m2_y + 30; y -= 20)
+                {
+                    ctx.strokeStyle = 'black';
+                    ctx.beginPath();
+                    ctx.moveTo(width/2 - 25, y);
+                    ctx.lineTo(block_m1_x + 30, y - 10);
+                    ctx.lineTo(block_m1_x + 15, y - 20);
                     ctx.stroke();
                     ctx.closePath();
                 }
