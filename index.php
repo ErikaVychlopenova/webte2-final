@@ -10,6 +10,7 @@ require "config/config.php";
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -18,95 +19,125 @@ require "config/config.php";
 <header><h1 id="lang">Tlmič automobilu</h1></header>
 <body>
 
-<nav>
-    <div class="navbar">
-        <ul>
-            <li><a href="index.php" id="main">Hlavná stránka</a></li>
-            <li><a href="description.php" id="desc">Popis API</a></li>
-        </ul>
+<ul class="nav nav-pills">
+    <li class="nav-item">
+        <a class="nav-link active" href="." id="main">Hlavná stránka</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="description.php" id="desc">Popis API</a>
+    </li>
+</ul>
+
+<div class="main">
+
+    <label for="language"></label>
+    <select class="form-select w-auto mb-4 mt-2" name="language" id="language" onchange="selectLang(this.value)">
+        <option value="SK">SK</option>
+        <option value="EN">EN</option>
+    </select>
+
+    <div id="langSK">
+
+        <form id="inputFormName-SK">
+            <h4>Prihlásenie - zdielanie naživo</h4>
+            <div class="input-group">
+                <label class="input-group-text" for="nameInput-SK">Zadaj meno:</label>
+                <input id="nameInput-SK" name="name" type="text" required>
+                <button class="btn btn-primary" type="button" id="buttonName-SK">Prihlásiť sa</button>
+            </div>
+        </form>
+        <form id="loggedInForm-SK">
+            <h4>Zdielanie naživo</h4>
+            <button class="btn btn-primary" type="button" id="buttonLogout-SK">Odhlásiť sa</button>
+        </form>
+        <form class="d-flex justify-content-center">
+            <p id="loginStatusText-SK">Môžte sa prihlásiť, alebo sledovať prihláseného užívateľa</p>
+            <ul class="list-group list-group-horizontal" id="editorList-SK"></ul>
+        </form>
+
+        <form id="inputFormSK">
+            <h4>Výpočet</h4>
+            <div class="input-group">
+                <label class="input-group-text" for="inputSK">Príkaz pre Octave:</label>
+                <textarea id="inputSK" name="input"></textarea>
+                <button type="button" class="btn btn-primary" id="inputButtonSK">Vyrátaj</button>
+            </div>
+            <p id="outputSK">Tu bude output</p>
+        </form>
+
+        <form id="inputFormR-SK">
+            <h4>Graf a animácia</h4>
+            <div class="input-group">
+                <label class="input-group-text" for="rSK">Zadaj r:</label>
+                <input id="rSK" name="r" type="number" step="0.01">
+                <button class="btn btn-primary" type="button" id="buttonR-SK" onclick="animationLoop()">Odošli r</button>
+            </div>
+        </form>
+        <form>
+            <h4>Odoslanie emailom</h4>
+            <button class="btn btn-primary" type="button" id="emailButtonSK">Odošli email</button>
+            <p id="emailResponseSK"></p>
+        </form>
+
     </div>
-</nav>
 
-<label for="language">SK / EN:</label>
-<select name="language" id="language" onchange="selectLang(this.value)">
-    <option value="SK">SK</option>
-    <option value="EN">EN</option>
-</select>
+    <div id="langEN">
+        <form id="inputFormName-EN">
+            <h4>Login - live share</h4>
+            <div class="input-group">
+                <label class="input-group-text" for="nameInput-EN">Input name:</label>
+                <input id="nameInput-EN" name="name" type="text" required>
+                <button class="btn btn-primary" type="button" id="buttonName-EN">Log in</button>
+            </div>
+        </form>
+        <form id="loggedInForm-EN">
+            <h4>Live share</h4>
+            <button class="btn btn-primary" type="button" id="buttonLogout-EN">Log out</button>
+        </form>
+        <form>
+            <p id="loginStatusText-EN">You can log in, or spectate a logged in user</p>
+            <ul class="list-group list-group-horizontal" id="editorList-EN"></ul>
+        </form>
 
-<div id="langSK">
-    <form id="inputFormSK">
-        <label for="inputSK"></label>
-        <textarea id="inputSK" name="input"></textarea><br>
-        <button type="button" id="inputButtonSK">Vyrátaj</button><br>
-        <p id="outputSK">Tu bude output</p>
-    </form>
-    <form id="inputFormR-SK">
-        <label for="rSK">Zadaj r:</label>
-        <input id="rSK" name="r" type="number" step="0.01">
-        <button type="button" id="buttonR-SK" onclick="animationLoop()">Odošli r</button>
-    </form>
-    <form>
-        <button type="button" id="emailButtonSK">Odošli email</button>
-        <p id="emailResponseSK"></p>
-    </form>
-    <form id="inputFormName-SK">
-        <label for="nameInput-SK">Zadaj meno:</label>
-        <input id="nameInput-SK" name="name" type="text" required>
-        <button type="button" id="buttonName-SK">Prihlásiť sa</button>
-    </form>
-    <form id="loggedInForm-SK">
-        <button type="button" id="buttonLogout-SK">Odhlásiť sa</button>
-    </form>
-    <p id="loginStatusText-SK">Nie ste prihlásený</p>
-    <ul id="editorList-SK"></ul>
+        <form id="inputFormEN">
+            <h4>Calculation</h4>
+            <div class="input-group">
+                <label class="input-group-text" for="inputEN">Command for Octave:</label>
+                <textarea id="inputEN" name="input"></textarea>
+                <button type="button" class="btn btn-primary" id="inputButtonEN">Calculate</button>
+            </div>
+            <p id="outputEN">Here should be the output</p>
+        </form>
 
-</div>
+        <form id="inputFormR-EN">
+            <h4>Graph and animation</h4>
+            <div class="input-group">
+                <label class="input-group-text" for="rEN">Type r:</label>
+                <input id="rEN" name="r" type="number" step="0.01">
+                <button class="btn btn-primary" type="button" id="buttonR-EN" onclick="animationLoop()">Send r</button>
+            </div>
+        </form>
+        <form>
+            <h4>Send with email</h4>
+            <button class="btn btn-primary" type="button" id="emailButtonEN">Send email</button>
+            <p id="emailResponseEN"></p>
+        </form>
 
-<div id="langEN">
-    <form id="inputFormEN">
-        <label for="inputEN"></label>
-        <textarea id="inputEN" name="input"></textarea><br>
-        <button type="button" id="inputButtonEN">Calculate</button><br>
-        <p id="outputEN">Here should be the output</p>
-    </form>
-    <form id="inputFormR-EN">
-        <label for="rEN">Type r:</label>
-        <input id="rEN" name="r" type="number" step="0.01">
-        <button type="button" id="buttonR-EN" onclick="animationLoop()">Send r</button>
-    </form>
-    <form>
-        <button type="button" id="emailButtonEN">Send email</button>
-        <p id="emailResponseEN"></p>
-    </form>
-    <form id="inputFormName-EN">
-        <label for="nameInput-EN">Input name:</label>
-        <input id="nameInput-EN" name="name" type="text" required>
-        <button type="button" id="buttonName-EN">Log in</button>
-    </form>
-    <form id="loggedInForm-EN">
-        <button type="button" id="buttonLogout-EN">Log out</button>
-    </form>
-    <p id="loginStatusText-EN">You are not logged in</p>
-    <ul id="editorList-EN"></ul>
+    </div>
+
+    <div id="choice">
+        <label for="checkGraph">graph</label>
+        <input type="checkbox" id="checkGraph" onclick="checkChoiceValue()" checked>
+        <label for="checkAnim">anim</label>
+        <input type="checkbox" id="checkAnim" onclick="checkChoiceValue()" checked>
+    </div>
+
+    <canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>
+    <canvas id="animationCanvas" width="300" height="500"></canvas>
 
 </div>
 
-<div id="choice">
-    <label for="checkGraph">graph</label>
-    <input type="checkbox" id="checkGraph" onclick="checkChoiceValue()" checked>
-    <label for="checkAnim">anim</label>
-    <input type="checkbox" id="checkAnim" onclick="checkChoiceValue()" checked>
-</div>
-
-<canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>
-<canvas id="animationCanvas" width="300" height="500"></canvas>
-
-<style>
-    #animationCanvas {
-        margin:20px auto;
-        border:1px solid #333;
-    }
-</style>
+<footer>© 2022 Vychlopeňová, Šalata, Lavrinčík, Masaryk</footer>
 
 <script>
 
@@ -528,6 +559,7 @@ require "config/config.php";
         editors.forEach(editor => {
             // SK
             let liSK = document.createElement("li");
+            liSK.classList.add("list-group-item");
             liSK.innerText = editor.name;
             liSK.style.cursor = "pointer";
             // listener for each editor item -> switch to spectate the editor
@@ -538,11 +570,11 @@ require "config/config.php";
                 socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'old_role': oldRole,
                     'spectated': user.spectated}));
                 loginFormSK.style.display = 'none';
-                loggedInFormSK.style.display = 'block';
+                loggedInFormSK.style.display = 'flex';
                 editorListSK.style.display = 'none';
                 loginStatusSK.innerText = loginStatusSpectatorMessageSK+editor.name;
                 loginFormEN.style.display = 'none';
-                loggedInFormEN.style.display = 'block';
+                loggedInFormEN.style.display = 'flex';
                 editorListEN.style.display = 'none';
                 loginStatusEN.innerText = loginStatusSpectatorMessageEN+editor.name;
                 // spectator cannot edit -> disable all buttons and inputs
@@ -559,6 +591,7 @@ require "config/config.php";
             })
             // EN
             let liEN = document.createElement("li");
+            liEN.classList.add("list-group-item");
             liEN.innerText = editor.name;
             liEN.style.cursor = "pointer";
             // listener for each editor item -> switch to spectate the editor
@@ -569,11 +602,11 @@ require "config/config.php";
                 socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'old_role': oldRole,
                     'spectated': user.spectated}));
                 loginFormSK.style.display = 'none';
-                loggedInFormSK.style.display = 'block';
+                loggedInFormSK.style.display = 'flex';
                 editorListSK.style.display = 'none';
                 loginStatusSK.innerText = loginStatusSpectatorMessageSK+editor.name;
                 loginFormEN.style.display = 'none';
-                loggedInFormEN.style.display = 'block';
+                loggedInFormEN.style.display = 'flex';
                 editorListEN.style.display = 'none';
                 loginStatusEN.innerText = loginStatusSpectatorMessageEN+editor.name;
                 // spectator cannot edit -> disable all buttons and inputs
@@ -603,10 +636,10 @@ require "config/config.php";
             user.name = name;
             socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': name, 'old_role': oldRole}));
             loginFormSK.style.display = 'none';
-            loggedInFormSK.style.display = 'block';
+            loggedInFormSK.style.display = 'flex';
             editorListSK.style.display = 'none';
             loginFormEN.style.display = 'none';
-            loggedInFormEN.style.display = 'block';
+            loggedInFormEN.style.display = 'flex';
             editorListEN.style.display = 'none';
             loginStatusSK.innerText = editorLoggedInMessageSK+name;
             loginStatusEN.innerText = editorLoggedInMessageEN+name;
@@ -625,10 +658,10 @@ require "config/config.php";
             user.name = name;
             socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': name, 'old_role': oldRole}));
             loginFormSK.style.display = 'none';
-            loggedInFormSK.style.display = 'block';
+            loggedInFormSK.style.display = 'flex';
             editorListSK.style.display = 'none';
             loginFormEN.style.display = 'none';
-            loggedInFormEN.style.display = 'block';
+            loggedInFormEN.style.display = 'flex';
             editorListEN.style.display = 'none';
             loginStatusSK.innerText = editorLoggedInMessageSK+name;
             loginStatusEN.innerText = editorLoggedInMessageEN+name;
@@ -646,10 +679,10 @@ require "config/config.php";
         user.spectated = undefined;
         socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': user.name, 'old_role': oldRole}));
         loggedInFormSK.style.display = 'none';
-        loginFormSK.style.display = 'block';
+        loginFormSK.style.display = 'flex';
         editorListSK.style.display = 'block';
         loggedInFormEN.style.display = 'none';
-        loginFormEN.style.display = 'block';
+        loginFormEN.style.display = 'flex';
         editorListEN.style.display = 'block';
         loginStatusSK.innerText = visitorNotLoggedInMessageSK;
         loginStatusEN.innerText = visitorNotLoggedInMessageEN;
@@ -673,10 +706,10 @@ require "config/config.php";
         user.spectated = undefined;
         socket.send(JSON.stringify({'event': 'change_role', 'role': user.role, 'name': user.name, 'old_role': oldRole}));
         loggedInFormSK.style.display = 'none';
-        loginFormSK.style.display = 'block';
+        loginFormSK.style.display = 'flex';
         editorListSK.style.display = 'block';
         loggedInFormEN.style.display = 'none';
-        loginFormEN.style.display = 'block';
+        loginFormEN.style.display = 'flex';
         editorListEN.style.display = 'block';
         loginStatusSK.innerText = visitorNotLoggedInMessageSK;
         loginStatusEN.innerText = visitorNotLoggedInMessageEN;
