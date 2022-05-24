@@ -43,7 +43,7 @@ require "config/config.php";
     <form id="inputFormR-SK">
         <label for="r">Zadaj r:</label>
         <input id="r" name="r" type="number" step="0.01">
-        <button type="button" id="buttonR-SK">Odošli r</button>
+        <button type="button" id="buttonR-SK" onclick="animationLoop()">Odošli r</button>
     </form>
     <form>
         <button type="button" id="emailButtonSK">Odošli email</button>
@@ -71,7 +71,7 @@ require "config/config.php";
     <form id="inputFormR-EN">
         <label for="r">Type r:</label>
         <input id="r" name="r" type="number" step="0.01">
-        <button type="button" id="buttonR-EN">Send r</button>
+        <button type="button" id="buttonR-EN" onclick="animationLoop()">Send r</button>
     </form>
     <form>
         <button type="button" id="emailButtonEN">Send email</button>
@@ -99,23 +99,30 @@ require "config/config.php";
         border:1px solid #333;
     }
 </style>
+
 <script>
-    var canvas;
-    var ctx;
-    var width  = 300;
-    var height = 500;
 
-    var block_m1_x = width/2 - 40;
-    var block_m1_y = 300;
+    // ANIMACIA
+    let frameRate  = 3/30;
+    let frameDelay = frameRate * 1000;
+    let t;
 
-    var block_m2_x = width/2 - 40;
-    var block_m2_y = 130;
+    let canvas;
+    let ctx;
+    let width  = 300;
+    let height = 500;
 
-    var frameRate  = 1/30;
-    var frameDelay = frameRate * 1000;
+    let block_m1_x = width/2 - 40;
+    let block_m1_y = 300;
 
+    let block_m2_x = width/2 - 40;
+    let block_m2_y = 130;
 
-    var loop = function() {
+    let setup = function() {
+        let block_m1_y = 300;
+        let block_m2_y = 130;
+        canvas = document.getElementById('animationCanvas');
+        ctx = canvas.getContext('2d');
 
         // KRESLENIE
         ctx.clearRect(0, 0, width, height);
@@ -151,8 +158,6 @@ require "config/config.php";
             ctx.closePath();
         }
 
-
-
         // ČIARA M1
         ctx.strokeStyle = 'black';
         ctx.beginPath();
@@ -171,7 +176,7 @@ require "config/config.php";
 
 
         // M1
-        ctx.fillStyle = 'blue';
+        ctx.fillStyle = '#0049FFFF';
         ctx.fillRect(block_m1_x , block_m1_y , 80, 40);
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
@@ -183,7 +188,7 @@ require "config/config.php";
 
 
         // M2
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = '#C21433FF';
         ctx.fillRect(block_m2_x , block_m2_y , 80, 40);
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
@@ -194,20 +199,109 @@ require "config/config.php";
         ctx.fillText("m2", block_m2_x + 25 , block_m2_y + 25);
 
         ctx.restore();
-
     };
-
-    var setup = function() {
-        canvas = document.getElementById('animationCanvas');
-        ctx = canvas.getContext('2d');
-
-        setInterval(loop, frameDelay);
-    };
-
     setup();
-</script>
 
-<script>
+    function animationLoop() {
+        let i = 0;
+        let loop = function () {
+            if(!isNaN(oldValuesX1[i]) || !isNaN(oldValuesX2[i])) {
+                // KRESLENIE
+                ctx.clearRect(0, 0, width, height);
+                ctx.save();
+
+                // ZEM
+                ctx.fillStyle = '#CCCCCC';
+                ctx.fillRect(0, height - 20, width, 20);
+
+                // pružina 1
+                block_m1_y = 300;
+                block_m1_y += oldValuesX2[i] * 15000;
+                block_m2_y = 130;
+                block_m2_y += oldValuesX1[i] * 3000;
+                for (let y = height - 20; y > block_m1_y + 30; y -= 20) {
+                    ctx.strokeStyle = 'black';
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2 - 10, y);
+                    ctx.lineTo(block_m1_x + 15, y - 10);
+                    ctx.lineTo(block_m1_x + 30, y - 20);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+
+                // pružina 2
+                for (let y = block_m1_y; y > block_m2_y + 30; y -= 20) {
+                    ctx.strokeStyle = 'black';
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2 - 10, y);
+                    ctx.lineTo(block_m1_x + 15, y - 10);
+                    ctx.lineTo(block_m1_x + 30, y - 20);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+
+                // ČIARA M1
+                ctx.strokeStyle = 'black';
+                ctx.beginPath();
+                ctx.moveTo(width / 2 + 10, height - 20);
+                ctx.lineTo(block_m1_x + 50, block_m1_y + 40);
+                ctx.stroke();
+                ctx.closePath();
+
+                // ČIARA M2
+                ctx.strokeStyle = 'black';
+                ctx.beginPath();
+                ctx.moveTo(width / 2 + 10, block_m1_y);
+                ctx.lineTo(block_m2_x + 50, block_m2_y + 40);
+                ctx.stroke();
+                ctx.closePath();
+
+
+                // M1
+                ctx.fillStyle = '#0049FFFF';
+                ctx.fillRect(block_m1_x, block_m1_y, 80, 40);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(block_m1_x, block_m1_y, 80, 40);
+                ctx.lineWidth = 1;
+                ctx.fillStyle = "white";
+                ctx.font = "18px Verdana";
+                ctx.fillText("m1", block_m1_x + 25, block_m1_y + 25);
+
+
+                // M2
+                ctx.fillStyle = '#C21433FF';
+                ctx.fillRect(block_m2_x, block_m2_y, 80, 40);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(block_m2_x, block_m2_y, 80, 40);
+                ctx.lineWidth = 1;
+                ctx.fillStyle = "white";
+                ctx.font = "18px Verdana";
+                ctx.fillText("m2", block_m2_x + 25, block_m2_y + 25);
+
+                ctx.restore();
+                i++;
+            }
+            else {
+                clearInterval(t);
+                setup();
+            }
+        }
+
+        let pocitadlo = 0;
+        let zdr = function () {
+            pocitadlo++;
+            if (pocitadlo === 3 ) {
+                clearInterval(zdrzanie);
+                if(oldValuesX1.length > 0) {
+                    t = setInterval(loop, frameDelay);
+                }
+            }
+        }
+        let zdrzanie = setInterval(zdr, 1000);
+    }
+
     let language = "SK";
     document.getElementById("language").addEventListener("change", () => {
         language = this.value;
@@ -328,6 +422,8 @@ require "config/config.php";
                 }
                 else if (data.event === 'edit_anim') {
                     //TODO update animacie
+
+
                 }
             }
         }
