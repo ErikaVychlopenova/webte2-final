@@ -272,123 +272,12 @@ require "config/config.php";
     };
     setup();
 
-    function animationLoop() {
+    /*function animationLoop() {
         let i = 0;
         let loop = function () {
             if(!isNaN(oldValuesX1[i]) || !isNaN(oldValuesX2[i])) {
                 // KRESLENIE
-                ctx.clearRect(0, 0, width, height);
-                ctx.save();
 
-                // ZEM
-                ctx.fillStyle = '#CCCCCC';
-                ctx.fillRect(0, height - 20, width, 20);
-
-                // KOLESO
-                /*
-                ctx.beginPath();
-                ctx.arc(150, 340, 140, 0, 2 * Math.PI);
-                ctx.strokeStyle = "black";
-                ctx.lineWidth = 8;
-                ctx.stroke();
-                ctx.lineWidth = 1;
-                ctx.fillStyle = '#6e7377';
-                ctx.fill();
-                 */
-
-                // pružina 1
-
-                block_m1_y = 300;
-                block_m1_y += oldValuesX1[i] * 200;
-                block_m2_y = 130;
-                block_m2_y += oldValuesX2[i] * 200;
-
-                // pružina 1
-                for (y = 0 ; y < block_m2_y + 20; y += 20)
-                {
-                    ctx.strokeStyle = 'black';
-                    ctx.beginPath();
-                    ctx.moveTo(width/2 -10, y);
-                    ctx.lineTo(block_m1_x + 15 , y - 10);
-                    ctx.lineTo(block_m1_x + 30, y - 20);
-                    ctx.stroke();
-                    ctx.closePath();
-                }
-                for (y = 0 ; y < block_m1_y; y += 20)
-                {
-                    ctx.strokeStyle = 'black';
-                    ctx.beginPath();
-                    ctx.moveTo(width/2 - 25, y);
-                    ctx.lineTo(block_m1_x + 30, y - 10);
-                    ctx.lineTo(block_m1_x + 15, y - 20);
-                    ctx.stroke();
-                    ctx.closePath();
-                }
-
-
-                // pružina 2
-                for (let y = block_m1_y; y > block_m2_y + 30; y -= 20) {
-                    ctx.strokeStyle = 'black';
-                    ctx.beginPath();
-                    ctx.moveTo(width / 2 - 10, y);
-                    ctx.lineTo(block_m1_x + 15, y - 10);
-                    ctx.lineTo(block_m1_x + 30, y - 20);
-                    ctx.stroke();
-                    ctx.closePath();
-                }
-                for (y = block_m1_y ; y > block_m2_y + 30; y -= 20)
-                {
-                    ctx.strokeStyle = 'black';
-                    ctx.beginPath();
-                    ctx.moveTo(width/2 - 25, y);
-                    ctx.lineTo(block_m1_x + 30, y - 10);
-                    ctx.lineTo(block_m1_x + 15, y - 20);
-                    ctx.stroke();
-                    ctx.closePath();
-                }
-
-                // ČIARA M1
-                ctx.strokeStyle = 'black';
-                ctx.beginPath();
-                ctx.moveTo(width/2 + 10, 0);
-                ctx.lineTo(block_m1_x + 50, block_m2_y);
-                ctx.stroke();
-                ctx.closePath();
-
-                // ČIARA M2
-                ctx.strokeStyle = 'black';
-                ctx.beginPath();
-                ctx.moveTo(width / 2 + 10, block_m1_y);
-                ctx.lineTo(block_m2_x + 50, block_m2_y + 40);
-                ctx.stroke();
-                ctx.closePath();
-
-
-                // M1
-                ctx.fillStyle = '#C21433FF';
-                ctx.fillRect(block_m1_x, block_m1_y, 80, 40);
-                ctx.strokeStyle = "black";
-                ctx.lineWidth = 2;
-                ctx.strokeRect(block_m1_x, block_m1_y, 80, 40);
-                ctx.lineWidth = 1;
-                ctx.fillStyle = "white";
-                ctx.font = "18px Verdana";
-                ctx.fillText("m1", block_m1_x + 25, block_m1_y + 25);
-
-
-                // M2
-                ctx.fillStyle = '#0049FFFF';
-                ctx.fillRect(block_m2_x, block_m2_y, 80, 40);
-                ctx.strokeStyle = "black";
-                ctx.lineWidth = 2;
-                ctx.strokeRect(block_m2_x, block_m2_y, 80, 40);
-                ctx.lineWidth = 1;
-                ctx.fillStyle = "white";
-                ctx.font = "18px Verdana";
-                ctx.fillText("m2", block_m2_x + 25, block_m2_y + 25);
-
-                ctx.restore();
-                i++;
             }
             else {
                 clearInterval(t);
@@ -407,7 +296,7 @@ require "config/config.php";
             }
         }
         let zdrzanie = setInterval(zdr, 1000);
-    }
+    }*/
 
     /* WEBSOCKETS START */
     /*
@@ -802,7 +691,7 @@ require "config/config.php";
 
     inputRbuttonSK.addEventListener("click", () => {
         if(isDrawing) {return;}
-        animationLoop();
+        //animationLoop();
         resetData();
         const form = document.getElementById("inputFormR-SK");
         const data = new FormData(form);
@@ -868,11 +757,125 @@ require "config/config.php";
                 oldValuesX2.push(newDataX2)
                 oldLabels.push(index);
                 graph.update();
+
+                ctx.clearRect(0, 0, width, height);
+                ctx.save();
+
+                // ZEM
+                ctx.fillStyle = '#CCCCCC';
+                ctx.fillRect(0, height - 20, width, 20);
+
+                // KOLESO
+                /*
+                ctx.beginPath();
+                ctx.arc(150, 340, 140, 0, 2 * Math.PI);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                ctx.lineWidth = 1;
+                ctx.fillStyle = '#6e7377';
+                ctx.fill();
+                 */
+
+                // pružina 1
+
+                block_m1_y = 300;
+                block_m1_y += newDataX1 * 500;
+                block_m2_y = 130;
+                block_m2_y += newDataX2 * 500;
+
+                // pružina 1
+                for (y = 0 ; y < block_m2_y + 20; y += 20)
+                {
+                    ctx.strokeStyle = 'black';
+                    ctx.beginPath();
+                    ctx.moveTo(width/2 -10, y);
+                    ctx.lineTo(block_m1_x + 15 , y - 10);
+                    ctx.lineTo(block_m1_x + 30, y - 20);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+                for (y = 0 ; y < block_m1_y; y += 20)
+                {
+                    ctx.strokeStyle = 'black';
+                    ctx.beginPath();
+                    ctx.moveTo(width/2 - 25, y);
+                    ctx.lineTo(block_m1_x + 30, y - 10);
+                    ctx.lineTo(block_m1_x + 15, y - 20);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+
+
+                // pružina 2
+                for (let y = block_m1_y; y > block_m2_y + 30; y -= 20) {
+                    ctx.strokeStyle = 'black';
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2 - 10, y);
+                    ctx.lineTo(block_m1_x + 15, y - 10);
+                    ctx.lineTo(block_m1_x + 30, y - 20);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+                for (y = block_m1_y ; y > block_m2_y + 30; y -= 20)
+                {
+                    ctx.strokeStyle = 'black';
+                    ctx.beginPath();
+                    ctx.moveTo(width/2 - 25, y);
+                    ctx.lineTo(block_m1_x + 30, y - 10);
+                    ctx.lineTo(block_m1_x + 15, y - 20);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+
+                // ČIARA M1
+                ctx.strokeStyle = 'black';
+                ctx.beginPath();
+                ctx.moveTo(width/2 + 10, 0);
+                ctx.lineTo(block_m1_x + 50, block_m2_y);
+                ctx.stroke();
+                ctx.closePath();
+
+                // ČIARA M2
+                ctx.strokeStyle = 'black';
+                ctx.beginPath();
+                ctx.moveTo(width / 2 + 10, block_m1_y);
+                ctx.lineTo(block_m2_x + 50, block_m2_y + 40);
+                ctx.stroke();
+                ctx.closePath();
+
+
+                // M1
+                ctx.fillStyle = '#C21433FF';
+                ctx.fillRect(block_m1_x, block_m1_y, 80, 40);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(block_m1_x, block_m1_y, 80, 40);
+                ctx.lineWidth = 1;
+                ctx.fillStyle = "white";
+                ctx.font = "18px Verdana";
+                ctx.fillText("m1", block_m1_x + 25, block_m1_y + 25);
+
+
+                // M2
+                ctx.fillStyle = '#0049FFFF';
+                ctx.fillRect(block_m2_x, block_m2_y, 80, 40);
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(block_m2_x, block_m2_y, 80, 40);
+                ctx.lineWidth = 1;
+                ctx.fillStyle = "white";
+                ctx.font = "18px Verdana";
+                ctx.fillText("m2", block_m2_x + 25, block_m2_y + 25);
+
+
+
                 index++;
                 // console.log(index, x1.length);
                 // console.log(oldValuesX1);
-                if (index > x1.length) {
+                if (index >= x1.length) {
                     clearInterval(timer);
+                    ctx.restore();
                     isDrawing = false;
                     inputRbuttonSK.disabled = false;
                     inputRbuttonEN.disabled = false;
