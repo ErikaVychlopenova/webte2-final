@@ -213,7 +213,7 @@ require "config/config.php";
 
 
         // M1
-        ctx.fillStyle = '#0049FFFF';
+        ctx.fillStyle = '#C21433FF';
         ctx.fillRect(block_m1_x , block_m1_y , 80, 40);
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
@@ -225,7 +225,7 @@ require "config/config.php";
 
 
         // M2
-        ctx.fillStyle = '#C21433FF';
+        ctx.fillStyle = '#0049FFFF';
         ctx.fillRect(block_m2_x , block_m2_y , 80, 40);
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
@@ -262,10 +262,12 @@ require "config/config.php";
                 ctx.fill();
 
                 // pružina 1
+
                 block_m1_y = 300;
-                block_m1_y += oldValuesX2[i] * 15000;
+                block_m1_y += oldValuesX1[i] * 2000;
                 block_m2_y = 130;
-                block_m2_y += oldValuesX1[i] * 3000;
+                block_m2_y += oldValuesX2[i] * 10000;
+
                 for (let y = height - 20; y > block_m1_y + 30; y -= 20) {
                     ctx.strokeStyle = 'black';
                     ctx.beginPath();
@@ -325,7 +327,7 @@ require "config/config.php";
 
 
                 // M1
-                ctx.fillStyle = '#0049FFFF';
+                ctx.fillStyle = '#C21433FF';
                 ctx.fillRect(block_m1_x, block_m1_y, 80, 40);
                 ctx.strokeStyle = "black";
                 ctx.lineWidth = 2;
@@ -337,7 +339,7 @@ require "config/config.php";
 
 
                 // M2
-                ctx.fillStyle = '#C21433FF';
+                ctx.fillStyle = '#0049FFFF';
                 ctx.fillRect(block_m2_x, block_m2_y, 80, 40);
                 ctx.strokeStyle = "black";
                 ctx.lineWidth = 2;
