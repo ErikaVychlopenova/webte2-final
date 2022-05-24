@@ -144,7 +144,7 @@ require "config/config.php";
 
     </div>
 
-    <div id="choice">
+    <div class="mt-2" id="choice">
         <label for="checkGraph">graph</label>
         <input type="checkbox" id="checkGraph" onclick="checkChoiceValue()" checked>
         <label for="checkAnim">anim</label>

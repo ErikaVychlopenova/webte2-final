@@ -37,168 +37,173 @@
     <option value="EN">EN</option>
 </select>
 
-<div id="contentSK">
-    <h2>Rozdelenie úloh:</h2>
-    <div class="part">
-        <div class="part">
-            <h4>xvychlopenova:</h4>
-            <ul>
-                <li>Dvojjazyčnosť</li>
-                <li>Graf synchronizovaný s animáciou</li>
-                <li>Export popisu API do pdf</li>
-                <li>Používanie verzionovacieho systému</li>
-                <li>Oprava chýb</li>
-                <li>Finalizácia aplikácie</li>
-            </ul>
+<div class="main">
+
+    <div id="contentSK">
+        <h2>Rozdelenie úloh:</h2>
+        <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+            <div class="part">
+                <h4>xvychlopenova:</h4>
+                <ul>
+                    <li>Dvojjazyčnosť</li>
+                    <li>Graf synchronizovaný s animáciou</li>
+                    <li>Export popisu API do pdf</li>
+                    <li>Používanie verzionovacieho systému</li>
+                    <li>Oprava chýb</li>
+                    <li>Finalizácia aplikácie</li>
+                </ul>
+            </div>
+            <div class="part  border border-primary p-5 border-5 mb-2 mt-2">
+                <h4>xsalata:</h4>
+                <ul>
+                    <li>API ku CAS zabezpečené API kľúčom alebo tokenom</li>
+                    <li>Logovanie a export do csv + odoslanie mailu</li>
+                    <li>Overenie API cez formulár v rozsahu špecifikovanom v úlohe 5</li>
+                    <li>Používanie verzionovacieho systému</li>
+                    <li>Oprava chýb</li>
+                    <li>Finalizácia aplikácie</li>
+                </ul>
+            </div>
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+                <h4>xlavrincikb:</h4>
+                <ul>
+                    <li>Animácia</li>
+                    <li>Používanie verzionovacieho systému</li>
+                    <li>Oprava chýb</li>
+                    <li>Finalizácia aplikácie</li>
+                </ul>
+            </div>
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+                <h4>xmasarykm1:</h4>
+                <ul>
+                    <li>Synchrónne sledovanie experimentovania</li>
+                    <li>Vzhľad aplikácie</li>
+                    <li>Používanie verzionovacieho systému</li>
+                    <li>Oprava chýb</li>
+                    <li>Finalizácia aplikácie</li>
+                </ul>
+            </div>
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+                <h4>Nedokončené úlohy:</h4>
+                <ul>
+                    <li>Docker balíček</li>
+                </ul>
+            </div>
         </div>
-        <div class="part">
-            <h4>xsalata:</h4>
-            <ul>
-                <li>API ku CAS zabezpečené API kľúčom alebo tokenom</li>
-                <li>Logovanie a export do csv + odoslanie mailu</li>
-                <li>Overenie API cez formulár v rozsahu špecifikovanom v úlohe 5</li>
-                <li>Používanie verzionovacieho systému</li>
-                <li>Oprava chýb</li>
-                <li>Finalizácia aplikácie</li>
-            </ul>
+
+        <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+            <h4>Použité knižnice, frameworky a API:</h4>
+
+            <p>ChartJS: knižnica pre vykreslenie grafu</p>
+            <p>Link: https://www.chartjs.org</p><br>
+
+            <p>JSpdf: knižnica pre export stránku do pdf a stiahnutie pdf</p>
+            <p>Link: https://github.com/parallax/jsPDF</p><br>
+
+            <p>JQuery: knižnica, kladie dôraz na interakciu medzi JavaScriptom a HTML</p>
+            <p>Link: https://jquery.com</p><br>
+
+            <p>NodeJS: Knižnica pre prácu s webovým serverom</p>
+            <p>Link: https://nodejs.org/en/</p><br>
+
+            <p>PHPMailer: Knižnica pre bezpečné odosielanie e-mailov</p>
+            <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
+
+            <p>Bootstrap: framework s nástrojmi pre CSS</p>
+            <p>Link: https://getbootstrap.com</p><br>
+
+            <p>Websockets: API, ktorý poskytuje obojsmernú interaktívnu komunikačnú reláciu medzi prehliadačom používateľa a serverom</p>
+            <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
+
+            <p>Octave: softvér na prevádzanie číselných výpočtov</p>
+            <p>Link: https://www.gnu.org/software/octave/index</p><br>
         </div>
-        <div class="part">
-            <h4>xlavrincikb:</h4>
-            <ul>
-                <li>Animácia</li>
-                <li>Používanie verzionovacieho systému</li>
-                <li>Oprava chýb</li>
-                <li>Finalizácia aplikácie</li>
-            </ul>
-        </div>
-        <div class="part">
-            <h4>xmasarykm1:</h4>
-            <ul>
-                <li>Synchrónne sledovanie experimentovania</li>
-                <li>Vzhľad aplikácie</li>
-                <li>Používanie verzionovacieho systému</li>
-                <li>Oprava chýb</li>
-                <li>Finalizácia aplikácie</li>
-            </ul>
-        </div>
-        <div class="part">
-            <h4>Nedokončené úlohy:</h4>
-            <ul>
-                <li>Docker balíček</li>
-            </ul>
-        </div>
+
     </div>
 
-    <div class="part">
-        <h4>Použité knižnice, frameworky a API:</h4>
+    <div id="contentEN" style="display: none">
+        <h2>How we divided our tasks:</h2>
+        <div class="part">
+            <div class="part">
+                <h4>xvychlopenova:</h4>
+                <ul>
+                    <li>Bilingual site</li>
+                    <li>Graph synchronized with animation</li>
+                    <li>Export API description to pdf</li>
+                    <li>Using the versioning system</li>
+                    <li>Fixing bugs</li>
+                    <li>Application finalization</li>
+                </ul>
+            </div>
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+                <h4>xsalata:</h4>
+                <ul>
+                    <li>API to CAS secured by API key or token</li>
+                    <li>Logging and exporting to csv + sending email</li>
+                    <li>Forms API validation to the extent specified in Task 5</li>
+                    <li>Using the versioning system</li>
+                    <li>Fixing bugs</li>
+                    <li>Application finalization</li>
+                </ul>
+            </div>
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+                <h4>xlavrincikb:</h4>
+                <ul>
+                    <li>Animmation</li>
+                    <li>Using the versioning system</li>
+                    <li>Fixing bugs</li>
+                    <li>Application finalization</li>
+                </ul>
+            </div>
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+                <h4>xmasarykm1:</h4>
+                <ul>
+                    <li>Synchronous monitoring of experimentation</li>
+                    <li>Design</li>
+                    <li>Using the versioning system</li>
+                    <li>Fixing bugs</li>
+                    <li>Application finalization</li>
+                </ul>
+            </div>
+            <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+                <h4>Unfinished tasks:</h4>
+                <ul>
+                    <li>Docker package</li>
+                </ul>
+            </div>
+        </div>
 
-        <p>ChartJS: knižnica pre vykreslenie grafu</p>
-        <p>Link: https://www.chartjs.org</p><br>
+        <div class="part border border-primary p-5 border-5 mb-2 mt-2">
+            <h4>Used libraries, frameworks and APIs:</h4>
 
-        <p>JSpdf: knižnica pre export stránku do pdf a stiahnutie pdf</p>
-        <p>Link: https://github.com/parallax/jsPDF</p><br>
+            <p>ChartJS: library for graphs</p>
+            <p>Link: https://www.chartjs.org</p><br>
 
-        <p>JQuery: knižnica, kladie dôraz na interakciu medzi JavaScriptom a HTML</p>
-        <p>Link: https://jquery.com</p><br>
+            <p>JSpdf: library for exporting site to pdf and download pdf</p>
+            <p>Link: https://github.com/parallax/jsPDF</p><br>
 
-        <p>NodeJS: Knižnica pre prácu s webovým serverom</p>
-        <p>Link: https://nodejs.org/en/</p><br>
+            <p>JQuery: library for simplifying JavaScript programming</p>
+            <p>Link: https://jquery.com</p><br>
 
-        <p>PHPMailer: Knižnica pre bezpečné odosielanie e-mailov</p>
-        <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
+            <p>NodeJS: library for working with web server</p>
+            <p>Link: https://nodejs.org/en/</p><br>
 
-        <p>Bootstrap: framework s nástrojmi pre CSS</p>
-        <p>Link: https://getbootstrap.com</p><br>
+            <p>PHPMailer: library for safe email sending</p>
+            <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
 
-        <p>Websockets: API, ktorý poskytuje obojsmernú interaktívnu komunikačnú reláciu medzi prehliadačom používateľa a serverom</p>
-        <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
+            <p>Bootstrap: framework with tools for CSS</p>
+            <p>Link: https://getbootstrap.com</p><br>
 
-        <p>Octave: softvér na prevádzanie číselných výpočtov</p>
-        <p>Link: https://www.gnu.org/software/octave/index</p><br>
+            <p>Websockets: API for opening a two-way interactive communication session between the user's browser and a server</p>
+            <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
+
+            <p>Octave: softwave used for numerical computations</p>
+            <p>Link: https://www.gnu.org/software/octave/index</p><br>
+        </div>
     </div>
 
 </div>
 
-<div id="contentEN" style="display: none">
-    <h2>How we divided our tasks:</h2>
-    <div class="part">
-        <div class="part">
-            <h4>xvychlopenova:</h4>
-            <ul>
-                <li>Bilingual site</li>
-                <li>Graph synchronized with animation</li>
-                <li>Export API description to pdf</li>
-                <li>Using the versioning system</li>
-                <li>Fixing bugs</li>
-                <li>Application finalization</li>
-            </ul>
-        </div>
-        <div class="part">
-            <h4>xsalata:</h4>
-            <ul>
-                <li>API to CAS secured by API key or token</li>
-                <li>Logging and exporting to csv + sending email</li>
-                <li>Forms API validation to the extent specified in Task 5</li>
-                <li>Using the versioning system</li>
-                <li>Fixing bugs</li>
-                <li>Application finalization</li>
-            </ul>
-        </div>
-        <div class="part">
-            <h4>xlavrincikb:</h4>
-            <ul>
-                <li>Animmation</li>
-                <li>Using the versioning system</li>
-                <li>Fixing bugs</li>
-                <li>Application finalization</li>
-            </ul>
-        </div>
-        <div class="part">
-            <h4>xmasarykm1:</h4>
-            <ul>
-                <li>Synchronous monitoring of experimentation</li>
-                <li>Design</li>
-                <li>Using the versioning system</li>
-                <li>Fixing bugs</li>
-                <li>Application finalization</li>
-            </ul>
-        </div>
-        <div class="part">
-            <h4>Unfinished tasks:</h4>
-            <ul>
-                <li>Docker package</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="part">
-        <h4>Used libraries, frameworks and APIs:</h4>
-
-        <p>ChartJS: library for graphs</p>
-        <p>Link: https://www.chartjs.org</p><br>
-
-        <p>JSpdf: library for exporting site to pdf and download pdf</p>
-        <p>Link: https://github.com/parallax/jsPDF</p><br>
-
-        <p>JQuery: library for simplifying JavaScript programming</p>
-        <p>Link: https://jquery.com</p><br>
-
-        <p>NodeJS: library for working with web server</p>
-        <p>Link: https://nodejs.org/en/</p><br>
-
-        <p>PHPMailer: library for safe email sending</p>
-        <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
-
-        <p>Bootstrap: framework with tools for CSS</p>
-        <p>Link: https://getbootstrap.com</p><br>
-
-        <p>Websockets: API for opening a two-way interactive communication session between the user's browser and a server</p>
-        <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
-
-        <p>Octave: softwave used for numerical computations</p>
-        <p>Link: https://www.gnu.org/software/octave/index</p><br>
-    </div>
-</div>
 <footer>© 2022 xvychlopenova, xsalata, xlavrincikb, xmasarykm1</footer>
 </body>
 </html>
