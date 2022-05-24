@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Doc</title>
 </head>
-<header><h1 id="lang">Dokumentácia</h1></header>
+<header>
+    <h1 class="border-bottom border-primary border-5 p-2" id="lang">Dokumentácia</h1>
+</header>
 <body>
 
 <ul class="nav nav-pills">
@@ -73,6 +75,7 @@
             <h4>xmasarykm1:</h4>
             <ul>
                 <li>Synchrónne sledovanie experimentovania</li>
+                <li>Vzhľad aplikácie</li>
                 <li>Používanie verzionovacieho systému</li>
                 <li>Oprava chýb</li>
                 <li>Finalizácia aplikácie</li>
@@ -110,7 +113,7 @@
         <p>Websockets: API, ktorý poskytuje obojsmernú interaktívnu komunikačnú reláciu medzi prehliadačom používateľa a serverom</p>
         <p>Link: https://github.com/PHPMailer/PHPMailer</p><br>
 
-        <p>Octave: softvér na prevádzanie šíselných výpočtov</p>
+        <p>Octave: softvér na prevádzanie číselných výpočtov</p>
         <p>Link: https://www.gnu.org/software/octave/index</p><br>
     </div>
 
@@ -154,6 +157,7 @@
             <h4>xmasarykm1:</h4>
             <ul>
                 <li>Synchronous monitoring of experimentation</li>
+                <li>Design</li>
                 <li>Using the versioning system</li>
                 <li>Fixing bugs</li>
                 <li>Application finalization</li>

@@ -16,7 +16,9 @@
     <title>API</title>
 </head>
 
-<header><h1 id="lang">Tlmič automobilu</h1></header>
+<header>
+    <h1 class="border-bottom border-primary border-5 p-2" id="lang">Tlmič automobilu</h1>
+</header>
 
 <body>
 <ul class="nav nav-pills">
@@ -40,10 +42,10 @@
     </select>
 
 
-    <a href="javascript:pdfFromHTML()" class="button">PDF</a>
+    <h4><a href="javascript:pdfFromHTML()" class="button">PDF</a></h4>
 
     <div id="contentSK">
-        <div class="part">
+        <div class="part border border-primary p-5 border-5 mb-2 mt-2">
             <h2>POST /api.php?api_key={api_key}</h2>
             <p>Vráti vyrátanú hodnotu</p>
             <p>Telo</p>
@@ -63,7 +65,7 @@
             </pre>
         </div>
 
-        <div class="part">
+        <div class="part border border-primary p-5 border-5 mb-2">
             <h2>GET /api.php?api_key={api_key}&r={r}</h2>
             <p>Vráti polia x1 a x2</p>
             <pre>
@@ -80,7 +82,7 @@
             </pre>
         </div>
 
-        <div class="part">
+        <div class="part border border-primary p-5 border-5 mb-2">
             <h2>GET /api.php?api_key={api_key}&email={email}</h2>
             <p>Pošle logy na email ako csv súbor</p>
             <pre>
@@ -99,7 +101,7 @@
     </div>
 
     <div id="contentEN" style="display: none">
-        <div class="part">
+        <div class="part border border-primary p-5 border-5 mb-2 mt-2">
             <h2>POST /api.php?api_key={api_key}</h2>
             <p>Returns calculated value</p>
             <p>Body</p>
@@ -119,7 +121,7 @@
             </pre>
         </div>
 
-        <div class="part">
+        <div class="part border border-primary p-5 border-5 mb-2">
             <h2>GET /api.php?api_key={api_key}&r={r}</h2>
             <p>Returns arrays x1 and x2</p>
             <pre>
@@ -136,7 +138,7 @@
             </pre>
         </div>
 
-        <div class="part">
+        <div class="part border border-primary p-5 border-5 mb-2">
             <h2>GET /api.php?api_key={api_key}&email={email}</h2>
             <p>Send logs to email as csv file</p>
             <pre>

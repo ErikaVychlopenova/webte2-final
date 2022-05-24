@@ -16,7 +16,9 @@ require "config/config.php";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <title>Webte Final</title>
 </head>
-<header><h1 id="lang">Tlmič automobilu</h1></header>
+<header>
+    <h1 class="border-bottom border-primary border-5 p-2" id="lang">Tlmič automobilu</h1>
+</header>
 <body>
 
 <ul class="nav nav-pills">
@@ -39,6 +41,7 @@ require "config/config.php";
         <option value="EN">EN</option>
     </select>
 
+
     <div id="langSK">
 
         <form id="inputFormName-SK">
@@ -58,6 +61,8 @@ require "config/config.php";
             <ul class="list-group list-group-horizontal" id="editorList-SK"></ul>
         </form>
 
+        <hr>
+
         <form id="inputFormSK">
             <h4>Výpočet</h4>
             <div class="input-group">
@@ -68,6 +73,14 @@ require "config/config.php";
             <p id="outputSK"></p>
         </form>
 
+        <form>
+            <h4>Odoslanie emailom</h4>
+            <button class="btn btn-primary" type="button" id="emailButtonSK">Odošli email</button>
+            <p id="emailResponseSK"></p>
+        </form>
+
+        <hr>
+
         <form id="inputFormR-SK">
             <h4>Graf a animácia</h4>
             <div class="input-group">
@@ -76,15 +89,13 @@ require "config/config.php";
                 <button class="btn btn-primary" type="button" id="buttonR-SK">Odošli r</button>
             </div>
         </form>
-        <form>
-            <h4>Odoslanie emailom</h4>
-            <button class="btn btn-primary" type="button" id="emailButtonSK">Odošli email</button>
-            <p id="emailResponseSK"></p>
-        </form>
 
     </div>
 
     <div id="langEN">
+
+        <hr>
+
         <form id="inputFormName-EN">
             <h4>Login - live share</h4>
             <div class="input-group">
@@ -102,6 +113,8 @@ require "config/config.php";
             <ul class="list-group list-group-horizontal" id="editorList-EN"></ul>
         </form>
 
+        <hr>
+
         <form id="inputFormEN">
             <h4>Calculation</h4>
             <div class="input-group">
@@ -112,6 +125,14 @@ require "config/config.php";
             <p id="outputEN"></p>
         </form>
 
+        <form>
+            <h4>Send with email</h4>
+            <button class="btn btn-primary" type="button" id="emailButtonEN">Send email</button>
+            <p id="emailResponseEN"></p>
+        </form>
+
+        <hr>
+
         <form id="inputFormR-EN">
             <h4>Graph and animation</h4>
             <div class="input-group">
@@ -119,11 +140,6 @@ require "config/config.php";
                 <input id="rEN" name="r" type="number" step="0.01" min="-0.7" max="0.7">
                 <button class="btn btn-primary" type="button" id="buttonR-EN">Send r</button>
             </div>
-        </form>
-        <form>
-            <h4>Send with email</h4>
-            <button class="btn btn-primary" type="button" id="emailButtonEN">Send email</button>
-            <p id="emailResponseEN"></p>
         </form>
 
     </div>
@@ -135,8 +151,10 @@ require "config/config.php";
         <input type="checkbox" id="checkAnim" onclick="checkChoiceValue()" checked>
     </div>
 
-    <canvas id="graphCanvas" style="width:100%;max-width:700px"></canvas>
-    <canvas id="animationCanvas" width="300" height="500"></canvas>
+    <div class="d-flex justify-content-around vw-100 align-items-center flex-wrap">
+        <canvas class="m-lg-auto" id="graphCanvas" style="width:100%;max-width:700px"></canvas>
+        <canvas id="animationCanvas" width="300" height="500"></canvas>
+    </div>
 
 </div>
 
@@ -384,9 +402,12 @@ require "config/config.php";
                     if (data.result) {
                         document.getElementById("outputSK").innerText = data.result;
                         document.getElementById("outputEN").innerText = data.result;
-                    } else {
+                    } else if (data.missing){
                         document.getElementById("outputSK").innerText = "Chýba príkaz.";
                         document.getElementById("outputEN").innerText = "Input missing.";
+                    } else {
+                        document.getElementById("outputSK").innerText = "Nastala chyba vo výpočte";
+                        document.getElementById("outputEN").innerText = "A calculation error occurred";
                     }
                 }
                 // graph reset and animation
@@ -645,18 +666,54 @@ require "config/config.php";
                         if(result["output"] === ""){
                             document.getElementById("outputSK").innerText = "Nastala chyba vo výpočte";
                             document.getElementById("outputEN").innerText = "A calculation error occurred";
+                            socket.send(JSON.stringify({'event': 'edit_calc', 'result': false, 'missing': false}));
                         }else {
                             document.getElementById("outputSK").innerText = result["output"];
                             document.getElementById("outputEN").innerText = result["output"];
+                            socket.send(JSON.stringify({'event': 'edit_calc', 'input': data.get('input'),
+                                'result': result["output"]}));
                         }
-                        socket.send(JSON.stringify({'event': 'edit_calc', 'input': data.get('input'),
-                            'result': result["output"]}));
                     })
                 }
                 else{
                     document.getElementById("outputSK").innerText = "Chýba príkaz.";
                     document.getElementById("outputEN").innerText = "Input missing.";
-                    socket.send(JSON.stringify({'event': 'edit_calc', 'result': false}));
+                    socket.send(JSON.stringify({'event': 'edit_calc', 'result': false, 'missing': true}));
+                }
+
+            })
+
+    })
+
+    inputButtonEN.addEventListener("click", () =>{
+        const form = document.getElementById("inputFormEN");
+        const data = new FormData(form);
+        let json = jsonify(data);
+        const request = new Request("api.php?api_key="+key,
+            {
+                method: "POST",
+                body : json
+            });
+        fetch(request)
+            .then(response => {
+                if(response.status === 200){
+                    response.json().then( result => {
+                        if(result["output"] === ""){
+                            document.getElementById("outputSK").innerText = "Nastala chyba vo výpočte";
+                            document.getElementById("outputEN").innerText = "A calculation error occurred";
+                            socket.send(JSON.stringify({'event': 'edit_calc', 'result': false, 'missing': false}));
+                        }else {
+                            document.getElementById("outputSK").innerText = result["output"];
+                            document.getElementById("outputEN").innerText = result["output"];
+                            socket.send(JSON.stringify({'event': 'edit_calc', 'input': data.get('input'),
+                                'result': result["output"]}));
+                        }
+                    })
+                }
+                else{
+                    document.getElementById("outputSK").innerText = "Chýba príkaz.";
+                    document.getElementById("outputEN").innerText = "Input missing.";
+                    socket.send(JSON.stringify({'event': 'edit_calc', 'result': false, 'missing': true}));
                 }
 
             })

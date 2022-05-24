@@ -39,7 +39,7 @@ function selectLang(value){
     }
 }
 
-inputButtonEN.addEventListener("click", () =>{
+/*inputButtonEN.addEventListener("click", () =>{
     const form = document.getElementById("inputFormEN");
     const data = new FormData(form);
     let json = jsonify(data);
@@ -60,9 +60,9 @@ inputButtonEN.addEventListener("click", () =>{
                 document.getElementById("outputEN").innerText = "Input missing.";
             }
         })
-})
+})*/
 
-inputRbuttonEN.addEventListener("click", () => {
+/*inputRbuttonEN.addEventListener("click", () => {
     const form = document.getElementById("inputFormR-EN");
     const data = new FormData(form);
 
@@ -74,7 +74,7 @@ inputRbuttonEN.addEventListener("click", () => {
                 })
             }
         })
-})
+})*/
 
 emailButtonEN.addEventListener("click", () => {
     fetch("api.php?api_key="+key+"&email="+email, {method: "GET"})
