@@ -268,12 +268,13 @@ require "config/config.php";
                 // pružina 1
 
                 block_m1_y = 300;
-                block_m1_y += oldValuesX1[i] * 2000;
+                block_m1_y += oldValuesX1[i] * 200;
                 block_m2_y = 130;
-                block_m2_y += oldValuesX2[i] * 2000;
+                block_m2_y += oldValuesX2[i] * 200;
+
 
                 // pružina 1
-                for (y = 0 ; y < block_m1_y; y += 20)
+                for (y = 0 ; y < block_m2_y + 20; y += 20)
                 {
                     ctx.strokeStyle = 'black';
                     ctx.beginPath();
@@ -293,6 +294,7 @@ require "config/config.php";
                     ctx.stroke();
                     ctx.closePath();
                 }
+
 
                 // pružina 2
                 for (let y = block_m1_y; y > block_m2_y + 30; y -= 20) {
