@@ -70,7 +70,7 @@ require "config/config.php";
             <div class="input-group">
                 <label class="input-group-text" for="rSK">Zadaj r:</label>
                 <input id="rSK" name="r" type="number" step="0.01">
-                <button class="btn btn-primary" type="button" id="buttonR-SK" onclick="animationLoop()">Odošli r</button>
+                <button class="btn btn-primary" type="button" id="buttonR-SK">Odošli r</button>
             </div>
         </form>
         <form>
@@ -114,7 +114,7 @@ require "config/config.php";
             <div class="input-group">
                 <label class="input-group-text" for="rEN">Type r:</label>
                 <input id="rEN" name="r" type="number" step="0.01">
-                <button class="btn btn-primary" type="button" id="buttonR-EN" onclick="animationLoop()">Send r</button>
+                <button class="btn btn-primary" type="button" id="buttonR-EN">Send r</button>
             </div>
         </form>
         <form>
@@ -302,7 +302,6 @@ require "config/config.php";
                 block_m1_y += oldValuesX1[i] * 200;
                 block_m2_y = 130;
                 block_m2_y += oldValuesX2[i] * 200;
-
 
                 // pružina 1
                 for (y = 0 ; y < block_m2_y + 20; y += 20)
@@ -498,22 +497,21 @@ require "config/config.php";
                         document.getElementById("outputEN").innerText = "Input missing.";
                     }
                 }
+                // graph reset and animation
                 else if (data.event === 'reset_graph' && !isDrawing) {
                     document.getElementById("rSK").value = data.input;
                     document.getElementById("rEN").value = data.input;
+                    oldValuesX1 = data.x1;
+                    oldValuesX2 = data.x2;
+                    animationLoop();
                     resetData();
-
                 }
+                // graph update
                 else if (data.event === 'edit_graph') {
                     index = 0;
                     x1 = data.x1;
                     x2 = data.x2;
                     addData();
-                }
-                else if (data.event === 'edit_anim') {
-                    //TODO update animacie
-
-
                 }
             }
         }
@@ -804,12 +802,13 @@ require "config/config.php";
 
     inputRbuttonSK.addEventListener("click", () => {
         if(isDrawing) {return;}
+        animationLoop();
         resetData();
         const form = document.getElementById("inputFormR-SK");
         const data = new FormData(form);
         r = data.get('r');
         socket.send(JSON.stringify({
-            'event': 'reset_graph', 'input': r
+            'event': 'reset_graph', 'input': r, 'oldValuesX1': oldValuesX1, 'oldValuesX2': oldValuesX2
         }));
         fetch("api.php?api_key="+key+"&r="+r, {method: "GET", headers:{'content-type': 'application/json'}})
             .then(response => response.json())
@@ -830,6 +829,7 @@ require "config/config.php";
 
     inputRbuttonEN.addEventListener("click", () => {
         if(isDrawing) {return;}
+        animationLoop();
         resetData();
         const form = document.getElementById("inputFormR-EN");
         const data = new FormData(form);
